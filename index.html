@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<!--
+  ==========================================================================
+  REGULUS ARMS - regulusarms.com
+  ==========================================================================
+ -->
+<html>
+<head>
+<meta charset="UTF-8">
+<title>~*~ REGULUS ARMS ~*~ Custom UV Printed PMags & Grips ~*~</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: #000;
+    background-image:
+      radial-gradient(circle at 10% 20%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 80% 60%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 45% 85%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 65% 15%, #ffffff 1px, transparent 1px),
+      radial-gradient(circle at 25% 55%, #ffffff 1px, transparent 1px);
+    background-size: 200px 200px;
+    animation: starmove 70s linear infinite;
+    color: #00ff00;
+    font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  @keyframes starmove {
+    from { background-position: 0 0; }
+    to   { background-position: 200px 400px; }
+  }
+
+  /* ============ FLOATING BACKGROUND CREW ============ */
+  .bg-floaters {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .floatpath {
+    position: absolute;
+    width: 150px;
+  }
+  .floatpath img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 12px rgba(0,255,0,0.35));
+  }
+  .spincw { animation: spin 9s linear infinite; }
+  .spinccw { animation: spinrev 11s linear infinite; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  @keyframes spinrev { to { transform: rotate(-360deg); } }
+  .floatpath1 { top: 6%; left: 4%; animation: drift1 42s ease-in-out infinite; }
+  .floatpath2 { top: 55%; left: 78%; width: 130px; animation: drift2 50s ease-in-out infinite; }
+  .floatpath3 { top: 18%; left: 60%; width: 140px; animation: drift3 37s ease-in-out infinite; }
+  .floatpath4 { top: 68%; left: 8%; width: 125px; animation: drift4 55s ease-in-out infinite; }
+  @keyframes drift1 {
+    0%   { transform: translate(0, 0); }
+    25%  { transform: translate(65vw, 15vh); }
+    50%  { transform: translate(40vw, 65vh); }
+    75%  { transform: translate(-5vw, 35vh); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes drift2 {
+    0%   { transform: translate(0, 0); }
+    30%  { transform: translate(-60vw, 10vh); }
+    60%  { transform: translate(-30vw, -35vh); }
+    85%  { transform: translate(10vw, -10vh); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes drift3 {
+    0%   { transform: translate(0, 0); }
+    20%  { transform: translate(-40vw, 40vh); }
+    50%  { transform: translate(-55vw, -20vh); }
+    80%  { transform: translate(-15vw, -45vh); }
+    100% { transform: translate(0, 0); }
+  }
+  @keyframes drift4 {
+    0%   { transform: translate(0, 0); }
+    33%  { transform: translate(55vw, -30vh); }
+    66%  { transform: translate(30vw, 20vh); }
+    100% { transform: translate(0, 0); }
+  }
+  a { color: #ffff00; }
+  a:visited { color: #ff66ff; }
+  .pagewrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  .marquee-top {
+    background: repeating-linear-gradient(45deg, #ff00ff, #ff00ff 10px, #00ffff 10px, #00ffff 20px);
+    color: #000;
+    font-weight: bold;
+    padding: 4px;
+    border: 4px outset #ff00ff;
+    font-size: 14px;
+  }
+  .titleblock {
+    text-align: center;
+    padding: 10px;
+    border: 6px double #ffff00;
+    margin: 10px 0;
+    background: #330033;
+  }
+  .titleblock h1 {
+    font-family: "Impact", "Arial Black", sans-serif;
+    font-size: 54px;
+    margin: 6px 0;
+    letter-spacing: 2px;
+    color: #ff0000;
+    text-shadow:
+      3px 3px 0 #ffff00,
+      -2px -2px 0 #00ffff,
+      0 0 20px #ff00ff;
+    transform: skew(-3deg);
+  }
+  .titleblock .sub {
+    color: #00ffff;
+    font-size: 20px;
+    text-shadow: 1px 1px 0 #ff00ff;
+  }
+  .blink {
+    animation: blinker 1s step-start infinite;
+    color: #ff0000;
+    font-weight: bold;
+  }
+  @keyframes blinker { 50% { opacity: 0; } }
+  .starburst {
+    display: inline-block;
+    background: #ffff00;
+    color: #cc0000;
+    border: 3px dashed #cc0000;
+    border-radius: 50%;
+    padding: 14px;
+    font-weight: bold;
+    transform: rotate(-8deg);
+    font-size: 13px;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .layout {
+    display: table;
+    width: 100%;
+    border-spacing: 8px;
+  }
+  .row { display: table-row; }
+  .sidebar {
+    display: table-cell;
+    width: 200px;
+    vertical-align: top;
+    background: #000066;
+    border: 4px ridge #00ffff;
+    padding: 8px;
+  }
+  .mainbar {
+    display: table-cell;
+    vertical-align: top;
+    background: #1a001a;
+    border: 4px ridge #ff00ff;
+    padding: 12px;
+  }
+  .sidebar h3 {
+    background: #ff0000;
+    color: #ffff00;
+    padding: 4px;
+    margin: 0 0 6px 0;
+    border: 2px outset #ffff00;
+    text-align: center;
+  }
+  .navlist { list-style: none; padding: 0; margin: 0 0 16px 0; }
+  .navlist li { margin: 4px 0; }
+  .navlist a {
+    display: block;
+    background: #000033;
+    border: 2px outset #00ff00;
+    padding: 4px 6px;
+    color: #00ff00;
+    text-decoration: none;
+  }
+  .navlist a:hover { background: #00ff00; color: #000033; }
+  .webring {
+    border: 2px inset #ffff00;
+    background: #330000;
+    padding: 6px;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+  h2.section {
+    background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #0099ff, #6600ff);
+    color: #000;
+    padding: 6px 10px;
+    border: 3px outset #fff;
+    font-family: "Impact", sans-serif;
+    letter-spacing: 1px;
+  }
+  .gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin: 12px 0;
+  }
+  .polaroid {
+    background: #fff;
+    padding: 8px 8px 24px 8px;
+    width: 150px;
+    transform: rotate(var(--r, -3deg));
+    box-shadow: 3px 3px 8px rgba(0,0,0,0.6);
+    text-align: center;
+    position: relative;
+  }
+  .polaroid .swatch {
+    width: 100%;
+    height: 110px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 40px;
+    color: #fff;
+    background: #111;
+    overflow: hidden;
+  }
+  .polaroid .swatch img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  .polaroid .cap {
+    font-family: "Comic Sans MS", cursive;
+    color: #000;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+  .polaroid .cal {
+    font-family: "Courier New", monospace;
+    color: #660000;
+    font-size: 10px;
+  }
+  .polaroid .spicy {
+    position: absolute;
+    top: -8px; right: -8px;
+    background: #ff0000;
+    color: #ffff00;
+    font-size: 9px;
+    font-weight: bold;
+    padding: 3px 5px;
+    border: 1px solid #000;
+    transform: rotate(10deg);
+  }
+  table.pricelist {
+    width: 100%;
+    border-collapse: collapse;
+    background: #000;
+    margin: 10px 0;
+  }
+  table.pricelist th {
+    background: #ff00ff;
+    color: #000;
+    border: 2px solid #00ffff;
+    padding: 6px;
+  }
+  table.pricelist td {
+    border: 2px solid #00ffff;
+    padding: 6px;
+    color: #00ff00;
+  }
+  table.pricelist tr:nth-child(even) td { background: #110022; }
+  .guestbook {
+    border: 3px ridge #ffff00;
+    background: #000;
+    padding: 10px;
+    font-size: 13px;
+  }
+  .guestbook .entry {
+    border-bottom: 1px dotted #00ff00;
+    padding: 6px 0;
+  }
+  .guestbook .who { color: #ff66ff; font-weight: bold; }
+  .footer {
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border-top: 4px double #ffff00;
+    font-size: 12px;
+    color: #00ffff;
+  }
+  .badgerow {
+    display: flex;
+    gap: 6px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: 10px 0;
+  }
+  .badge88 {
+    width: 88px;
+    height: 31px;
+    border: 1px solid #fff;
+    background: #000;
+    color: #0f0;
+    font-size: 9px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    line-height: 1.1;
+  }
+  .counterbox {
+    text-align: center;
+    margin: 10px 0;
+    font-family: "Courier New", monospace;
+  }
+  .odometer {
+    display: inline-block;
+    background: #000;
+    color: #ff0000;
+    padding: 6px 10px;
+    letter-spacing: 4px;
+    border: 3px inset #888;
+    font-size: 22px;
+  }
+  .hr90 {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #00ffff, #6600ff, #ff00ff, #ff0000 8px);
+    border: none;
+    margin: 14px 0;
+  }
+  @media (max-width: 620px) {
+    .layout, .row, .sidebar, .mainbar { display: block; width: 100%; }
+    .sidebar { margin-bottom: 10px; }
+  }
+
+  /* ============ BOOMBOX WIDGET ============ */
+  .boombox {
+    position: fixed;
+    right: 14px;
+    bottom: 14px;
+    background: #111;
+    border: 3px outset #999;
+    border-radius: 6px;
+    padding: 8px 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 999;
+    box-shadow: 0 0 16px rgba(0,255,0,0.35);
+  }
+  .boombox button {
+    background: #000;
+    color: #0f0;
+    border: 2px outset #0f0;
+    font-family: "Courier New", monospace;
+    font-weight: bold;
+    font-size: 16px;
+    padding: 4px 10px;
+    cursor: pointer;
+  }
+  .boombox button:active { border-style: inset; }
+  .boombox .track {
+    font-family: "Courier New", monospace;
+    color: #0f0;
+    font-size: 11px;
+    max-width: 130px;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  .boombox .eq {
+    display: flex;
+    align-items: flex-end;
+    gap: 2px;
+    height: 16px;
+  }
+  .boombox .eq span {
+    width: 3px;
+    background: #0f0;
+    animation: eqbounce 0.9s ease-in-out infinite;
+  }
+  .boombox .eq span:nth-child(1) { height: 40%; animation-delay: 0s; }
+  .boombox .eq span:nth-child(2) { height: 90%; animation-delay: 0.15s; }
+  .boombox .eq span:nth-child(3) { height: 60%; animation-delay: 0.3s; }
+  .boombox .eq span:nth-child(4) { height: 100%; animation-delay: 0.45s; }
+  .boombox .eq span:nth-child(5) { height: 50%; animation-delay: 0.6s; }
+  .boombox.paused .eq span { animation-play-state: paused; height: 15% !important; }
+  @keyframes eqbounce { 0%,100% { height: 20%; } 50% { height: 100%; } }
+  .boombox .vol {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .boombox .vol span {
+    color: #0f0;
+    font-size: 12px;
+  }
+  .boombox input[type="range"] {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 60px;
+    height: 4px;
+    background: #063a06;
+    border: 1px solid #0f0;
+    outline: none;
+    cursor: pointer;
+  }
+  .boombox input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 10px;
+    height: 14px;
+    background: #0f0;
+    border: 1px solid #063a06;
+    cursor: pointer;
+  }
+  .boombox input[type="range"]::-moz-range-thumb {
+    width: 10px;
+    height: 14px;
+    background: #0f0;
+    border: 1px solid #063a06;
+    cursor: pointer;
+  }
+
+  /* ============ QUEST POPUP (hover the logo) ============ */
+  .logo-wrap {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  .logo-wrap h1 { margin: 6px 0; }
+  .questpopup {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 320px;
+    max-width: 82vw;
+    background: linear-gradient(180deg, #1a1200, #000);
+    border: 3px solid #ffe066;
+    border-radius: 8px;
+    box-shadow: 0 0 4px #000 inset, 0 0 22px rgba(255,224,102,0.65), 0 8px 20px rgba(0,0,0,0.7);
+    padding: 10px;
+    z-index: 50;
+    text-align: center;
+
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, 6px) scale(0.7);
+    transform-origin: top center;
+    transition: opacity 0.25s ease, transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), visibility 0.25s;
+  }
+  .logo-wrap:hover .questpopup,
+  .logo-wrap:focus .questpopup,
+  .logo-wrap:focus-within .questpopup {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, 14px) scale(1);
+  }
+  .questpopup::before {
+    content: "";
+    position: absolute;
+    top: -10px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 0 10px 10px 10px;
+    border-style: solid;
+    border-color: transparent transparent #ffe066 transparent;
+  }
+  .questheader {
+    font-family: "Impact", sans-serif;
+    letter-spacing: 1px;
+    color: #ffe066;
+    text-shadow: 0 0 8px #ff9900, 1px 1px 0 #000;
+    font-size: 15px;
+    margin-bottom: 8px;
+    animation: questglow 1.2s ease-in-out infinite;
+  }
+  @keyframes questglow {
+    0%, 100% { text-shadow: 0 0 6px #ff9900, 1px 1px 0 #000; }
+    50% { text-shadow: 0 0 16px #fff2b0, 1px 1px 0 #000; }
+  }
+  .questpopup img {
+    width: 100%;
+    height: auto;
+    border: 2px solid #ffe066;
+    border-radius: 4px;
+    background: #fff;
+    display: block;
+  }
+  .questfooter {
+    margin-top: 8px;
+    font-size: 10px;
+    color: #cbb87a;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="bg-floaters" aria-hidden="true">
+  <div class="floatpath floatpath1"><img src="img/c1.png" class="spincw" alt=""></div>
+  <div class="floatpath floatpath2"><img src="img/c2.png" class="spinccw" alt=""></div>
+  <div class="floatpath floatpath3"><img src="img/c3.png" class="spincw" alt=""></div>
+  <div class="floatpath floatpath4"><img src="img/c4.png" class="spinccw" alt=""></div>
+</div>
+<div class="pagewrap">
+  <div class="marquee-top">
+    <marquee behavior="scroll" scrollamount="6">
+      &raquo;&raquo;&raquo; WELCOME TO THE REGULUS ARMS INFORMATION SUPERHIGHWAY &laquo;&laquo;&laquo; UV PRINTED PMAGS &amp; GRIPS SHIPPED WORLDWIDE &raquo;&raquo;&raquo; SITE IS 100% AWESOME AND 56K MODEM FRIENDLY &laquo;&laquo;&laquo; NO DESIGN TOO WEIRD, WE'VE PRINTED WEIRDER &raquo;&raquo;&raquo;
+    </marquee>
+  </div>
+  <div class="titleblock">
+    <div class="blink" style="text-align:center; margin-bottom:4px;">*** NEW DROPS WHENEVER ***</div>
+    <div class="logo-wrap" tabindex="0">
+      <h1>REGULUS ARMS</h1>
+      <div class="questpopup">
+        <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
+        <img src="img/regulus.png" alt="Marcus Atilius Regulus - the general behind the name">
+        <div class="questfooter">hover away, general, your story is safe</div>
+      </div>
+    </div>
+    <div class="sub">~ custom uv printed pmags &amp; grips ~ est. in a garage, perfected on the internet ~</div>
+    <div class="badgerow">
+      <span class="starburst">100%<br>UV<br>CURED</span>
+      <span class="starburst">NOT<br>A<br>STICKER</span>
+      <span class="starburst">MADE<br>FOR<br>NERDS</span>
+    </div>
+  </div>
+  <div class="layout">
+    <div class="row">
+      <div class="sidebar">
+        <h3>SITE MAP</h3>
+        <ul class="navlist">
+          <li><a href="#home">Home.html</a></li>
+          <li><a href="#gallery">Gallery.html</a></li>
+          <li><a href="#pricing">Order Info</a></li>
+          <li><a href="https://pmag30customizer.regulusarms.com/" target="_blank" rel="noopener">PMag 30 Customizer</a></li>
+          <li><a href="https://1911gripcustomizer.regulusarms.com/" target="_blank" rel="noopener">1911 Grip Customizer</a></li>
+          <li><a href="https://www.gunbroker.com/all/search?includesellers=3204634" target="_blank" rel="noopener">Gun Broker Listings</a></li>
+        </ul>
+        <h3>NOW PRINTING</h3>
+        <div class="counterbox">
+          <div class="odometer" id="hitcounter">004217</div>
+          <div style="font-size:11px; color:#ffff00;">mags printed since 1998*</div>
+          <div style="font-size:9px; color:#888;">*not really 1998</div>
+        </div>
+        <div class="webring">
+          <b>&#9733; GUNRING &#9733;</b><br>
+          part of the Custom Firearms Art Webring<br>
+          [ &lt;&lt; prev ] [ random ] [ next &gt;&gt; ]
+        </div>
+      </div>
+      <div class="mainbar" id="home">
+        <h2 class="section">ABOUT THE SHOP</h2>
+        <p>
+          Regulus Arms specializes in firearm customization and
+          manufacturing, offering precision laser engraving, high-quality
+          UV printing on PMAGs, pistol grips, and other firearm accessories,
+          as well as manufacturing AR-15 lower receivers. Our UV printing
+          isn't a sticker or wrap &mdash; it's printed directly onto the
+          surface with durable UV-cured inks for a vibrant, long-lasting
+          finish, while our laser engraving creates crisp, permanent
+          markings on metal.
+        </p>
+        <hr class="hr90">
+        <h2 class="section" id="gallery">GALLERY.HTML</h2>
+        <p>a few recent pieces fresh off the printer:</p>
+        <div class="gallery">
+
+          <div class="polaroid" style="--r:-4deg;">
+            <div class="swatch"><img src="img/mag-noodles.jpg" alt="Late Night Noodles mag"></div>
+            <div class="cap">"Late Night Noodles"</div>
+            <div class="cal">5.56 X 45 UV print</div>
+          </div>
+
+          <div class="polaroid" style="--r:3deg;">
+            <div class="swatch"><img src="img/mag-manga.jpg" alt="Manga panel mag"></div>
+            <div class="cap">Manga Panel Mag</div>
+            <div class="cal">b&amp;w halftone UV print</div>
+          </div>
+
+          <div class="polaroid" style="--r:-2deg;">
+            <div class="swatch"><img src="img/mag-crane.jpg" alt="Crane and lotus mag"></div>
+            <div class="cap">"Crane &amp; Lotus" mag</div>
+            <div class="cal">5.56 X 45 succulent chinese art</div>
+          </div>
+
+          <div class="polaroid" style="--r:5deg;">
+            <div class="swatch"><img src="img/mag-mars.jpg" alt="Mars mag"></div>
+            <div class="cap">"Red Planet" Mars mag</div>
+            <div class="cal">5.56 X 45 planetary series</div>
+          </div>
+
+          <div class="polaroid" style="--r:-5deg;">
+            <div class="spicy">18+</div>
+            <div class="swatch"><img src="img/mag-devil.jpg" alt="American Devil mag"></div>
+            <div class="cap">"American Devil" mag</div>
+            <div class="cal">.300 Blackout</div>
+          </div>
+
+          <div class="polaroid" style="--r:2deg;">
+            <div class="swatch"><img src="img/mag-alien-gold.jpg" alt="Gold alien mag"></div>
+            <div class="cap">"bold and brash"</div>
+            <div class="cal">5.56 X 45</div>
+          </div>
+
+          <div class="polaroid" style="--r:-3deg;">
+            <div class="swatch"><img src="img/mag-ufo.jpg" alt="UFOs Are Real mag"></div>
+            <div class="cap">"UFOs Are Real" mag</div>
+            <div class="cal">5.56 X 45 UFO series</div>
+          </div>
+
+          <div class="polaroid" style="--r:4deg;">
+            <div class="spicy">18+</div>
+            <div class="swatch"><img src="img/mag-island.jpg" alt="Island pinup mag"></div>
+            <div class="cap">NIKKE Pinup Mag</div>
+            <div class="cal">5.56 X 45 UV print</div>
+          </div>
+
+          <div class="polaroid" style="--r:-4.5deg;">
+            <div class="spicy">18+</div>
+            <div class="swatch"><img src="img/grip-island-1.jpg" alt="Island pinup grip panel, blonde"></div>
+            <div class="cap">NIKKE Grip Panel #1</div>
+            <div class="cal">custom fit, hand cut</div>
+          </div>
+
+          <div class="polaroid" style="--r:3.5deg;">
+            <div class="spicy">18+</div>
+            <div class="swatch"><img src="img/grip-island-2.jpg" alt="Island pinup grip panel, beret girl"></div>
+            <div class="cap">NIKKE Grip Panel #2</div>
+            <div class="cal">custom fit, hand cut</div>
+          </div>
+
+        </div>
+        <p style="text-align:center; font-size:12px; color:#00ffff;">
+          got a theme in mind? we can do full custom art &mdash; anime, manga panel UV prints,
+          americana, movie homages, your OC, your unit patch, your dog, anime waifus.  send a ref pic.
+        </p>
+        <hr class="hr90">
+        <h2 class="section" id="pricing">ORDER INFO</h2>
+        <table class="pricelist">
+          <tr><th>ITEM</th><th>PRICE</th></tr>
+          <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td>$17.76+S&amp;H</td></tr>
+          <tr><td>UV Printed PMAG, Customer Supplied</td><td>$19.99</td></tr>
+          <tr><td>Custom 1911 Pistol Grip Set</td><td>coming soon</td></tr>
+        </table>
+        <p style="font-size:12px; color:#ff9900;">
+          <span class="blink">&#9888;</span> check the listing for available designs, or message us
+          on GunBroker with your reference art, mag color, and caliber marking preference. Use the customization tools in the sitemap to make a layout for your design.
+        </p>
+        <div style="text-align:center; margin:14px 0;">
+          <a href="https://www.gunbroker.com/all/search?includesellers=3204634" target="_blank" rel="noopener" style="
+            background:#ff0000; color:#ffff00; font-weight:bold; font-size:20px;
+            padding:10px 24px; border:4px outset #ffff00; text-decoration:none;
+            display:inline-block;">
+            &#9889; USE GUNBROKER TO ORDER &#9889;
+          </a>
+        </div>
+        <hr class="hr90">
+        <h2 class="section" id="guestbook">SIGN OUR GUESTBOOK</h2>
+        <div class="guestbook">
+          <div class="entry"><span class="who">Tex_Reloader88:</span> mag showed up looking cleaner than my actual rifle. 10/10 will order again!!</div>
+          <div class="entry"><span class="who">RangeDayRick:</span> the crane and lotus design is unreal in person, print quality is insane</div>
+          <div class="entry"><span class="who">gunplumber_99:</span> got the mars mag, matches my sand build perfectly. this site rules</div>
+          <div class="entry"><span class="who">anon:</span> UFOs ARE real and now so is my mag &#128126;</div>
+          <div class="entry"><span class="who">noodle_king:</span> the beef noodle mag lives in my range bag now, no notes</div>
+        </div>
+        <hr class="hr90">
+        <div id="links" style="text-align:center; font-size:12px;">
+          <h2 class="section">WEB LINKS</h2>
+          <p>proud member of these fine internet establishments:</p>
+          <div class="badgerow">
+            <div class="badge88">MADE WITH<br>NOTEPAD</div>
+            <div class="badge88">BEST VIEWED<br>AT 800x600</div>
+            <div class="badge88">100% ORGANIC<br>UV INK</div>
+            <div class="badge88">NO<br>STICKERS<br>EVER</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; REGULUS ARMS &mdash; regulusarms.com &mdash; this page best experienced with the sound on<br>
+    <span class="blink">UNDER CONSTRUCTION FOREVER</span> &mdash; last updated: whenever we feel like it
+  </div>
+</div>
+
+<audio id="bgm" src="assets/music.ogg" loop preload="auto"></audio>
+<div class="boombox paused" id="boombox">
+  <button id="bgmToggle" type="button" aria-label="Play background music">&#9654;</button>
+  <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
+  <div class="track">NOW PLAYING:<br>music.ogg</div>
+  <div class="vol">
+    <span>&#128266;</span>
+    <input type="range" id="bgmVolume" min="0" max="100" value="20" aria-label="Volume">
+  </div>
+</div>
+
+<script>
+  (function(){
+    var el = document.getElementById('hitcounter');
+    var n = 4217;
+    setInterval(function(){
+      if (Math.random() < 0.3) n++;
+      el.textContent = String(n).padStart(6,'0');
+    }, 2500);
+  })();
+
+  (function(){
+    var audio = document.getElementById('bgm');
+    var btn = document.getElementById('bgmToggle');
+    var box = document.getElementById('boombox');
+    var vol = document.getElementById('bgmVolume');
+
+    audio.volume = 0.2;
+
+    function setPlayingUI(isPlaying) {
+      btn.innerHTML = isPlaying ? '&#10074;&#10074;' : '&#9654;';
+      box.classList.toggle('paused', !isPlaying);
+    }
+
+    function tryAutoplay() {
+      var p = audio.play();
+      if (p && p.then) {
+        p.then(function(){ setPlayingUI(true); })
+         .catch(function(){
+            setPlayingUI(false);
+            // most browsers block audio autoplay until the visitor
+            // interacts with the page - start on their first click/key
+            var startOnInteract = function(){
+              audio.play().then(function(){ setPlayingUI(true); }).catch(function(){});
+              document.removeEventListener('click', startOnInteract);
+              document.removeEventListener('keydown', startOnInteract);
+            };
+            document.addEventListener('click', startOnInteract, { once: true });
+            document.addEventListener('keydown', startOnInteract, { once: true });
+         });
+      }
+    }
+    tryAutoplay();
+
+    btn.addEventListener('click', function(){
+      if (audio.paused) {
+        audio.play().then(function(){ setPlayingUI(true); }).catch(function(){});
+      } else {
+        audio.pause();
+        setPlayingUI(false);
+      }
+    });
+
+    vol.addEventListener('input', function(){
+      audio.volume = vol.value / 100;
+    });
+  })();
+</script>
+</body>
+</html>
