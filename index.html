@@ -158,6 +158,7 @@
     font-size: 14px;
   }
   .titleblock {
+    position: relative;
     text-align: center;
     padding: 10px;
     border: 6px double #ffff00;
@@ -566,6 +567,38 @@
     cursor: pointer;
   }
 
+  /* ============ ATF PEEKERS (hide behind titleblock) ============ */
+  .atf-peek {
+    position: absolute;
+    width: 110px;
+    z-index: -1;
+    pointer-events: none;
+    transition: transform 3.5s ease-in-out;
+  }
+  .atf-peek img {
+    width: 100%;
+    height: auto;
+    display: block;
+    filter: drop-shadow(0 0 14px rgba(0,0,0,0.75));
+  }
+  .atf-peek.spooked {
+    transition: transform 0.35s ease-in;
+  }
+  .atf-left {
+    left: 0;
+    transform: translateX(10%);
+  }
+  .atf-right {
+    right: 0;
+    transform: translateX(-10%);
+  }
+  .atf-left.peek {
+    transform: translateX(-97%);
+  }
+  .atf-right.peek {
+    transform: translateX(97%);
+  }
+
   /* ============ QUEST POPUP (hover the logo) ============ */
   .logo-wrap {
     position: relative;
@@ -687,6 +720,10 @@
     </div>
   </div>
   <div class="titleblock">
+    <div class="atf-peek atf-left" id="atfLeft" aria-hidden="true"><img src="img/atf-left.png" alt=""></div>
+    <div class="atf-peek atf-left" id="atfLeft2" aria-hidden="true"><img src="img/atf-left.png" alt=""></div>
+    <div class="atf-peek atf-right" id="atfRight" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
+    <div class="atf-peek atf-right" id="atfRight2" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
     <div class="blink" style="text-align:center; margin-bottom:4px;">*** NEW DROPS WHENEVER ***</div>
     <div class="logo-wrap" tabindex="0">
       <h1 data-text="REGULUS ARMS">REGULUS ARMS</h1>
@@ -930,6 +967,80 @@
       el.style.setProperty('--dir', Math.random() < 0.5 ? 1 : -1);
       el.classList.add('spin-in');
     });
+  })();
+
+  (function(){
+    var sides = [
+      { el: document.getElementById('atfLeft') },
+      { el: document.getElementById('atfLeft2') },
+      { el: document.getElementById('atfRight') },
+      { el: document.getElementById('atfRight2') }
+    ].filter(function(side){ return !!side.el; });
+    if (!sides.length) return;
+
+    var PROXIMITY = 170;
+    var mouseX = -9999, mouseY = -9999;
+
+    document.addEventListener('mousemove', function(e){
+      mouseX = e.clientX;
+      mouseY = e.clientY;
+    });
+
+    sides.forEach(function(side){
+      side.peeking = false;
+      side.spookedUntil = 0;
+
+      function retreat(spooked){
+        side.peeking = false;
+        side.el.classList.remove('peek');
+        if (spooked) {
+          side.el.classList.add('spooked');
+          side.spookedUntil = Date.now() + 4000;
+          setTimeout(function(){
+            side.el.classList.remove('spooked');
+          }, 500);
+        }
+      }
+      side.retreat = retreat;
+
+      function schedulePeek(){
+        var delay = 12000 + Math.random() * 25000;
+        setTimeout(tryPeek, delay);
+      }
+
+      function tryPeek(){
+        if (Date.now() < side.spookedUntil) {
+          setTimeout(tryPeek, 1500);
+          return;
+        }
+        side.el.style.top = (5 + Math.random() * 75) + '%';
+        side.el.classList.remove('spooked');
+        side.el.classList.add('peek');
+        side.peeking = true;
+        setTimeout(function(){
+          retreat(false);
+          schedulePeek();
+        }, 4500 + Math.random() * 2000);
+      }
+
+      schedulePeek();
+    });
+
+    function checkProximity(){
+      sides.forEach(function(side){
+        if (!side.peeking) return;
+        var rect = side.el.getBoundingClientRect();
+        var closestX = Math.max(rect.left, Math.min(mouseX, rect.right));
+        var closestY = Math.max(rect.top, Math.min(mouseY, rect.bottom));
+        var dx = mouseX - closestX;
+        var dy = mouseY - closestY;
+        if (Math.sqrt(dx * dx + dy * dy) < PROXIMITY) {
+          side.retreat(true);
+        }
+      });
+      requestAnimationFrame(checkProximity);
+    }
+    requestAnimationFrame(checkProximity);
   })();
 
   (function(){
