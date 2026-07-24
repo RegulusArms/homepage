@@ -60,12 +60,18 @@
     font-size: 16px;
     overflow-x: hidden;
   }
-  .starfield {
+  /* split into two layers (one per tile size) so each can loop by exactly
+     one tile period - a single transform can't seamlessly wrap two
+     differently-sized tiled backgrounds at once */
+  .starfield-a, .starfield-b {
     position: fixed;
     top: -450px; left: -450px; right: -450px; bottom: -450px;
     z-index: -2;
     pointer-events: none;
-    /* dot colors follow the OBAFGKM stellar classification (blackbody color by surface temp) */
+    will-change: transform;
+  }
+  /* dot colors follow the OBAFGKM stellar classification (blackbody color by surface temp) */
+  .starfield-a {
     background-image:
       radial-gradient(circle at 7% 14%, #cad7ff 1px, transparent 1px),
       radial-gradient(circle at 82% 9%, rgba(170,191,255,0.9) 2px, transparent 2px),
@@ -76,7 +82,12 @@
       radial-gradient(circle at 55% 21%, #9bb0ff 1px, transparent 1px),
       radial-gradient(circle at 12% 88%, rgba(255,140,105,0.5) 1px, transparent 1px),
       radial-gradient(circle at 74% 81%, rgba(255,242,161,0.9) 2px, transparent 2px),
-      radial-gradient(circle at 29% 62%, rgba(255,181,108,0.7) 1px, transparent 1px),
+      radial-gradient(circle at 29% 62%, rgba(255,181,108,0.7) 1px, transparent 1px);
+    background-size: 340px 340px;
+    animation: starmoveA 70s linear infinite;
+  }
+  .starfield-b {
+    background-image:
       radial-gradient(circle at 15% 25%, rgba(202,215,255,0.55) 1px, transparent 1px),
       radial-gradient(circle at 70% 12%, #f8f7ff 1px, transparent 1px),
       radial-gradient(circle at 40% 55%, rgba(255,233,168,0.6) 1px, transparent 1px),
@@ -84,17 +95,16 @@
       radial-gradient(circle at 25% 80%, #ffd2a1 1px, transparent 1px),
       radial-gradient(circle at 60% 68%, rgba(255,107,74,0.5) 1px, transparent 1px),
       radial-gradient(circle at 8% 60%, rgba(234,239,255,0.7) 1px, transparent 1px);
-    background-size:
-      340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px,
-      340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px,
-      190px 230px, 190px 230px, 190px 230px, 190px 230px, 190px 230px,
-      190px 230px, 190px 230px;
-    animation: starmove 70s linear infinite;
-    will-change: transform;
+    background-size: 190px 230px;
+    animation: starmoveB 55s linear infinite;
   }
-  @keyframes starmove {
+  @keyframes starmoveA {
     from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(200px, 400px, 0); }
+    to   { transform: translate3d(340px, 340px, 0); }
+  }
+  @keyframes starmoveB {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(190px, 230px, 0); }
   }
 
   /* ============ FLOATING BACKGROUND CREW ============ */
@@ -707,7 +717,8 @@
 </style>
 </head>
 <body>
-<div class="starfield" aria-hidden="true"></div>
+<div class="starfield-a" aria-hidden="true"></div>
+<div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
   <div class="floatpath floatpath1"><img src="img/c1.png" class="spincw" alt=""></div>
   <div class="floatpath floatpath2"><img src="img/c2.png" class="spinccw" alt=""></div>
