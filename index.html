@@ -55,38 +55,46 @@
   body {
     margin: 0;
     background-color: #000;
+    color: #00ff00;
+    font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  .starfield {
+    position: fixed;
+    top: -450px; left: -450px; right: -450px; bottom: -450px;
+    z-index: -2;
+    pointer-events: none;
+    /* dot colors follow the OBAFGKM stellar classification (blackbody color by surface temp) */
     background-image:
-      radial-gradient(circle at 7% 14%, #ffffff 1px, transparent 1px),
-      radial-gradient(circle at 82% 9%, rgba(255,255,255,0.7) 2px, transparent 2px),
-      radial-gradient(circle at 63% 33%, #ffffff 1px, transparent 1px),
-      radial-gradient(circle at 18% 47%, rgba(255,255,255,0.6) 1px, transparent 1px),
-      radial-gradient(circle at 91% 58%, #ffffff 2px, transparent 2px),
-      radial-gradient(circle at 38% 72%, rgba(255,255,255,0.8) 1px, transparent 1px),
-      radial-gradient(circle at 55% 21%, #ffffff 1px, transparent 1px),
-      radial-gradient(circle at 12% 88%, rgba(255,255,255,0.5) 1px, transparent 1px),
-      radial-gradient(circle at 74% 81%, #ffffff 2px, transparent 2px),
-      radial-gradient(circle at 29% 62%, rgba(255,255,255,0.7) 1px, transparent 1px),
-      radial-gradient(circle at 15% 25%, rgba(255,255,255,0.55) 1px, transparent 1px),
-      radial-gradient(circle at 70% 12%, #ffffff 1px, transparent 1px),
-      radial-gradient(circle at 40% 55%, rgba(255,255,255,0.6) 1px, transparent 1px),
-      radial-gradient(circle at 88% 40%, rgba(255,255,255,0.65) 2px, transparent 2px),
-      radial-gradient(circle at 25% 80%, #ffffff 1px, transparent 1px),
-      radial-gradient(circle at 60% 68%, rgba(255,255,255,0.5) 1px, transparent 1px),
-      radial-gradient(circle at 8% 60%, rgba(255,255,255,0.7) 1px, transparent 1px);
+      radial-gradient(circle at 7% 14%, #cad7ff 1px, transparent 1px),
+      radial-gradient(circle at 82% 9%, rgba(170,191,255,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 63% 33%, #fff4ea 1px, transparent 1px),
+      radial-gradient(circle at 18% 47%, rgba(255,210,161,0.6) 1px, transparent 1px),
+      radial-gradient(circle at 91% 58%, rgba(234,239,255,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 38% 72%, rgba(248,247,255,0.8) 1px, transparent 1px),
+      radial-gradient(circle at 55% 21%, #9bb0ff 1px, transparent 1px),
+      radial-gradient(circle at 12% 88%, rgba(255,140,105,0.5) 1px, transparent 1px),
+      radial-gradient(circle at 74% 81%, rgba(255,242,161,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 29% 62%, rgba(255,181,108,0.7) 1px, transparent 1px),
+      radial-gradient(circle at 15% 25%, rgba(202,215,255,0.55) 1px, transparent 1px),
+      radial-gradient(circle at 70% 12%, #f8f7ff 1px, transparent 1px),
+      radial-gradient(circle at 40% 55%, rgba(255,233,168,0.6) 1px, transparent 1px),
+      radial-gradient(circle at 88% 40%, rgba(170,191,255,0.65) 2px, transparent 2px),
+      radial-gradient(circle at 25% 80%, #ffd2a1 1px, transparent 1px),
+      radial-gradient(circle at 60% 68%, rgba(255,107,74,0.5) 1px, transparent 1px),
+      radial-gradient(circle at 8% 60%, rgba(234,239,255,0.7) 1px, transparent 1px);
     background-size:
       340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px,
       340px 340px, 340px 340px, 340px 340px, 340px 340px, 340px 340px,
       190px 230px, 190px 230px, 190px 230px, 190px 230px, 190px 230px,
       190px 230px, 190px 230px;
     animation: starmove 70s linear infinite;
-    color: #00ff00;
-    font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
-    font-size: 16px;
-    overflow-x: hidden;
+    will-change: transform;
   }
   @keyframes starmove {
-    from { background-position: 0 0; }
-    to   { background-position: 200px 400px; }
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(200px, 400px, 0); }
   }
 
   /* ============ FLOATING BACKGROUND CREW ============ */
@@ -699,6 +707,7 @@
 </style>
 </head>
 <body>
+<div class="starfield" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
   <div class="floatpath floatpath1"><img src="img/c1.png" class="spincw" alt=""></div>
   <div class="floatpath floatpath2"><img src="img/c2.png" class="spinccw" alt=""></div>
@@ -980,10 +989,18 @@
 
     var PROXIMITY = 170;
     var mouseX = -9999, mouseY = -9999;
+    var ticking = false;
 
     document.addEventListener('mousemove', function(e){
       mouseX = e.clientX;
       mouseY = e.clientY;
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(function(){
+          checkProximity();
+          ticking = false;
+        });
+      }
     });
 
     sides.forEach(function(side){
@@ -1038,9 +1055,7 @@
           side.retreat(true);
         }
       });
-      requestAnimationFrame(checkProximity);
     }
-    requestAnimationFrame(checkProximity);
   })();
 
   (function(){
