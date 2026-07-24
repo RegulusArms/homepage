@@ -408,6 +408,71 @@
     border: none;
     margin: 14px 0;
   }
+
+  /* ============ BACKLOG ALARM CLOCK ============ */
+  .backlogbox {
+    text-align: center;
+    margin: 10px 0 16px 0;
+  }
+  .alarmclock {
+    display: inline-block;
+    background: #000;
+    border: 4px inset #888;
+    border-radius: 10px;
+    padding: 14px 26px;
+    box-shadow: 0 0 22px rgba(255,0,0,0.45);
+    transition: box-shadow 0.6s ease;
+  }
+  .alarmclock.settled {
+    box-shadow: 0 0 22px rgba(0,255,0,0.5);
+  }
+  .alarmclock .bellrow {
+    font-size: 20px;
+    margin-bottom: 2px;
+    display: inline-block;
+    animation: bellring 0.5s ease-in-out infinite;
+    transform-origin: top center;
+  }
+  .alarmclock.settled .bellrow {
+    animation: none;
+  }
+  @keyframes bellring {
+    0%, 100% { transform: rotate(0deg); }
+    25% { transform: rotate(-14deg); }
+    75% { transform: rotate(14deg); }
+  }
+  .clockdigits {
+    font-family: "Courier New", monospace;
+    font-size: 32px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #ff0000;
+    text-shadow: 0 0 8px #ff0000, 0 0 22px rgba(255,0,0,0.6);
+    min-width: 260px;
+    transition: color 0.6s ease, text-shadow 0.6s ease;
+  }
+  .clockdigits.settle {
+    color: #00ff00;
+    text-shadow: 0 0 8px #00ff00, 0 0 22px rgba(0,255,0,0.6);
+  }
+  .clockdigits.flip {
+    animation: digitflip 0.15s ease-out;
+  }
+  @keyframes digitflip {
+    0% { transform: scaleY(0.15); filter: blur(2px); opacity: 0.3; }
+    55% { transform: scaleY(1.15); filter: blur(0); opacity: 1; }
+    100% { transform: scaleY(1); }
+  }
+  .clocklabel {
+    font-size: 11px;
+    color: #ffff00;
+    margin-top: 8px;
+    letter-spacing: 1px;
+  }
+  .clocklabel.settle {
+    color: #00ff00;
+    animation: blinker 1s step-start infinite;
+  }
   @media (max-width: 620px) {
     .layout, .row, .sidebar, .mainbar { display: block; width: 100%; }
     .sidebar { margin-bottom: 10px; }
@@ -676,6 +741,15 @@
           markings on metal.
         </p>
         <hr class="hr90">
+        <h2 class="section" id="backlog">CURRENT BACKLOG</h2>
+        <div class="backlogbox">
+          <div class="alarmclock" id="backlogClock">
+            <div class="bellrow">&#9200;</div>
+            <div class="clockdigits" id="backlogDigits">CALCULATING...</div>
+            <div class="clocklabel" id="backlogLabel">ESTIMATED TIME UNTIL YOUR ORDER SHIPS</div>
+          </div>
+        </div>
+        <hr class="hr90">
         <h2 class="section" id="gallery">GALLERY.HTML</h2>
         <p>a few recent pieces fresh off the printer:</p>
         <div class="gallery">
@@ -832,6 +906,50 @@
       el.style.setProperty('--dir', Math.random() < 0.5 ? 1 : -1);
       el.classList.add('spin-in');
     });
+  })();
+
+  (function(){
+    var digits = document.getElementById('backlogDigits');
+    var clock = document.getElementById('backlogClock');
+    var label = document.getElementById('backlogLabel');
+    if (!digits) return;
+
+    var steps = [
+      '4,819,203 YRS',
+      '1,204,887 YRS',
+      '392,015 YRS',
+      '84,662 YRS',
+      '17,340 YRS',
+      '3,908 YRS',
+      '742 YRS',
+      '48 MONTHS',
+      '31 MONTHS',
+      '20 WEEKS',
+      '12 WEEKS',
+      '6 WEEKS',
+      '9 DAYS',
+      '5 DAYS'
+    ];
+
+    var i = 0;
+    function tick(){
+      digits.textContent = steps[i];
+      digits.classList.remove('flip');
+      void digits.offsetWidth;
+      digits.classList.add('flip');
+      i++;
+      if (i < steps.length) {
+        var progress = i / steps.length;
+        var delay = 60 + Math.pow(progress, 2.4) * 850;
+        setTimeout(tick, delay);
+      } else {
+        digits.classList.add('settle');
+        clock.classList.add('settled');
+        label.classList.add('settle');
+        label.textContent = 'CURRENT BACKLOG - THANKS FOR YOUR PATIENCE';
+      }
+    }
+    setTimeout(tick, 400);
   })();
 
   (function(){
