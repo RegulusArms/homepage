@@ -327,6 +327,33 @@
     box-shadow: 3px 3px 8px rgba(0,0,0,0.6);
     text-align: center;
     position: relative;
+    z-index: 1;
+    cursor: pointer;
+  }
+  .questpopup.polaroid-popup {
+    position: fixed;
+    z-index: 1000;
+    pointer-events: none;
+    top: 50%;
+    left: 50%;
+    width: auto;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow: auto;
+    padding: 14px;
+    transform: translate(-50%, -50%) scale(0.7);
+  }
+  .questpopup.polaroid-popup img {
+    max-height: 78vh;
+    max-width: 100%;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    display: block;
+    margin: 0 auto;
+  }
+  .questpopup.polaroid-popup::before {
+    display: none;
   }
   .polaroid .swatch {
     width: 100%;
@@ -698,6 +725,11 @@
     visibility: visible;
     transform: translate(-50%, 14px) scale(1);
   }
+  .questpopup.polaroid-popup.show {
+    opacity: 1;
+    visibility: visible;
+    transform: translate(-50%, -50%) scale(1);
+  }
   .questpopup::before {
     content: "";
     position: absolute;
@@ -1019,6 +1051,39 @@
     italy.addEventListener('play', function(){ h1.classList.add('italy-mode'); });
     italy.addEventListener('pause', function(){ h1.classList.remove('italy-mode'); });
     italy.addEventListener('ended', function(){ h1.classList.remove('italy-mode'); });
+  })();
+
+  (function(){
+    document.querySelectorAll('.polaroid').forEach(function(card){
+      var img = card.querySelector('.swatch img');
+      if (!img) return;
+      var cal = card.querySelector('.cal');
+      card.tabIndex = 0;
+
+      var popup = document.createElement('div');
+      popup.className = 'questpopup polaroid-popup';
+
+      var bigImg = document.createElement('img');
+      bigImg.src = img.src;
+      bigImg.alt = img.alt;
+      popup.appendChild(bigImg);
+
+      if (cal) {
+        var footer = document.createElement('div');
+        footer.className = 'questfooter';
+        footer.textContent = cal.textContent;
+        popup.appendChild(footer);
+      }
+
+      document.body.appendChild(popup);
+
+      function open(){ popup.classList.add('show'); }
+      function close(){ popup.classList.remove('show'); }
+      card.addEventListener('mouseenter', open);
+      card.addEventListener('mouseleave', close);
+      card.addEventListener('focus', open);
+      card.addEventListener('blur', close);
+    });
   })();
 
   (function(){
