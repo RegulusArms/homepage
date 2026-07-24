@@ -184,6 +184,7 @@
     background: #330033;
   }
   .titleblock h1 {
+    display: inline-block;
     font-family: "Impact", "Arial Black", sans-serif;
     font-size: 54px;
     margin: 6px 0;
@@ -194,6 +195,22 @@
       -2px -2px 0 #00ffff,
       0 0 20px #ff00ff;
     transform: skew(-3deg);
+  }
+  .titleblock h1.italy-mode {
+    color: #fff;
+    background: linear-gradient(90deg,
+      #008C45 0%, #008C45 33.33%,
+      #F4F5F0 33.33%, #F4F5F0 66.66%,
+      #CD212A 66.66%, #CD212A 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: 0 0 6px rgba(255,255,255,0.5);
+    animation: italyPulse 0.9s ease-in-out infinite;
+  }
+  @keyframes italyPulse {
+    0%, 100% { transform: skew(-3deg) scale(1); }
+    50% { transform: skew(-3deg) scale(1.08); }
   }
   .titleblock .sub {
     color: #00ffff;
@@ -623,8 +640,12 @@
     display: inline-block;
     cursor: pointer;
   }
-  .logo-wrap h1 { margin: 6px 0; position: relative; }
-  .logo-wrap h1::after {
+  .mainbar > .logo-wrap {
+    display: block;
+    width: 100%;
+  }
+  .titleblock h1 { margin: 6px 0; position: relative; }
+  .titleblock h1::after {
     content: attr(data-text);
     position: absolute;
     inset: 0;
@@ -643,7 +664,7 @@
     color: transparent;
     -webkit-text-fill-color: transparent;
   }
-  .logo-wrap h1.shine::after {
+  .titleblock h1.shine::after {
     animation: logoshine 1.6s ease-out 1 forwards;
   }
   @keyframes logoshine {
@@ -745,14 +766,8 @@
     <div class="atf-peek atf-right" id="atfRight" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
     <div class="atf-peek atf-right" id="atfRight2" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
     <div class="blink" style="text-align:center; margin-bottom:4px;">*** NEW DROPS WHENEVER ***</div>
-    <div class="logo-wrap" tabindex="0">
-      <h1 data-text="REGULUS ARMS">REGULUS ARMS</h1>
-      <div class="questpopup">
-        <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
-        <img src="img/regulus.png" alt="Marcus Atilius Regulus - the general behind the name">
-        <div class="questfooter">hover away, general, your story is safe</div>
-      </div>
-    </div>
+    <h1 data-text="REGULUS ARMS">REGULUS ARMS</h1>
+
     <div class="sub">~ custom uv printed pmags &amp; grips ~ est. in a garage, perfected on the internet,</div><div class="sub"><div class="logo-wrap" tabindex="0">made in OHIO ~
       <div class="questpopup">
         <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
@@ -802,7 +817,14 @@
         </div>
       </div>
       <div class="mainbar" id="home">
-        <h2 class="section">ABOUT THE SHOP</h2>
+      <div class="logo-wrap" tabindex="0">
+      <h2 class="section">ABOUT THE SHOP</h2>
+      <div class="questpopup">
+        <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
+        <img src="img/regulus.png" alt="Marcus Atilius Regulus - the general behind the name">
+        <div class="questfooter">hover away, general, your story is safe</div>
+      </div>
+    </div>
         <p>
           Regulus Arms specializes in firearm customization and
           manufacturing, offering precision laser engraving, high-quality
@@ -954,6 +976,7 @@
 </div>
 
 <audio id="bgm" src="assets/music.ogg" loop preload="auto"></audio>
+<audio id="italyAudio" src="assets/italy.mp3" preload="auto"></audio>
 <div class="boombox paused" id="boombox">
   <button id="bgmToggle" type="button" aria-label="Play background music">&#9654;</button>
   <div class="eq"><span></span><span></span><span></span><span></span><span></span></div>
@@ -966,7 +989,7 @@
 
 <script>
   (function(){
-    var h1 = document.querySelector('.logo-wrap h1');
+    var h1 = document.querySelector('.titleblock h1');
     if (!h1) return;
     function scheduleShine(){
       var delay = 10000 + Math.random() * 30000;
@@ -980,6 +1003,22 @@
       }, delay);
     }
     scheduleShine();
+  })();
+
+  (function(){
+    var h1 = document.querySelector('.titleblock h1');
+    var bgm = document.getElementById('bgm');
+    var italy = document.getElementById('italyAudio');
+    if (!h1 || !italy) return;
+    h1.addEventListener('click', function(){
+      if (bgm && !bgm.paused) bgm.pause();
+      italy.currentTime = 0;
+      italy.volume = 0.2;
+      italy.play().catch(function(){});
+    });
+    italy.addEventListener('play', function(){ h1.classList.add('italy-mode'); });
+    italy.addEventListener('pause', function(){ h1.classList.remove('italy-mode'); });
+    italy.addEventListener('ended', function(){ h1.classList.remove('italy-mode'); });
   })();
 
   (function(){
@@ -1134,6 +1173,9 @@
       btn.innerHTML = isPlaying ? '&#10074;&#10074;' : '&#9654;';
       box.classList.toggle('paused', !isPlaying);
     }
+
+    audio.addEventListener('play', function(){ setPlayingUI(true); });
+    audio.addEventListener('pause', function(){ setPlayingUI(false); });
 
     function tryAutoplay() {
       var p = audio.play();
