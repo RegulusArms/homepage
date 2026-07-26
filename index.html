@@ -1316,6 +1316,7 @@
     var originalSrc = audio.getAttribute('src');
     var koreaSrc = 'assets/kim.mp3';
     var koreaActive = false;
+    var wasPlayingBeforeKorea = false;
 
     audio.volume = 0.2;
 
@@ -1373,6 +1374,7 @@
     audio.addEventListener('pause', function(){ setPlayingUI(false); });
 
     function openKorea(){
+      wasPlayingBeforeKorea = !audio.paused;
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
       frame.src = 'korea.html';
@@ -1397,8 +1399,10 @@
       audio.src = originalSrc;
       audio.currentTime = 0;
       trackLabel.innerHTML = 'NOW PLAYING:<br>music.ogg';
-      if (resumePlayback) {
+      if (resumePlayback && wasPlayingBeforeKorea) {
         playAudio().catch(function(){});
+      } else {
+        setPlayingUI(false);
       }
     }
 
