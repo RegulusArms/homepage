@@ -514,6 +514,32 @@
     border: none;
     background: transparent;
   }
+
+  .ufo-trigger {
+    cursor: pointer;
+  }
+  .ufo-trigger:hover,
+  .ufo-trigger:focus {
+    color: #fff;
+    text-shadow: 0 0 6px #0f0;
+  }
+
+  /* ============ UFO OVERLAY ============ */
+  .ufo-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 1500;
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+  .ufo-overlay.open { display: flex; }
+  .ufo-iframe {
+    width: min(90vw, 900px);
+    height: min(85vh, 700px);
+    border: none;
+    background: transparent;
+  }
   .counterbox {
     text-align: center;
     margin: 10px 0;
@@ -1057,7 +1083,7 @@
           <div class="entry"><span class="who">Tex_Reloader88:</span> mag showed up looking cleaner than my actual rifle. 10/10 will order again!!</div>
           <div class="entry"><span class="who">RangeDayRick:</span> the crane and lotus design is unreal in person, print quality is insane</div>
           <div class="entry"><span class="who">gunplumber_99:</span> got the mars mag, matches my sand build perfectly. this site rules</div>
-          <div class="entry"><span class="who">anon:</span> UFOs ARE real and now so is my mag &#128126;</div>
+          <div class="entry"><span class="who">anon:</span> <span class="ufo-trigger" id="ufoTrigger" tabindex="0" role="button" aria-label="Open UFO effect">UFOs ARE real</span> and now so is my mag &#128126;</div>
           <div class="entry"><span class="who">noodle_king:</span> the beef noodle mag lives in my range bag now, no notes</div>
         </div>
         <hr class="hr90">
@@ -1094,6 +1120,9 @@
 </div>
 <div class="korea-overlay" id="koreaOverlay" aria-hidden="true">
   <iframe id="koreaFrame" class="korea-iframe" title="Korea" src="about:blank"></iframe>
+</div>
+<div class="ufo-overlay" id="ufoOverlay" aria-hidden="true">
+  <iframe id="ufoFrame" class="ufo-iframe" title="UFO" src="about:blank"></iframe>
 </div>
 
 <script>
@@ -1312,11 +1341,17 @@
     var overlay = document.getElementById('koreaOverlay');
     var frame = document.getElementById('koreaFrame');
     var badge = document.getElementById('koreaBadge');
+    var ufoOverlay = document.getElementById('ufoOverlay');
+    var ufoFrame = document.getElementById('ufoFrame');
+    var ufoTrigger = document.getElementById('ufoTrigger');
 
     var originalSrc = audio.getAttribute('src');
     var koreaSrc = 'assets/kim.mp3';
     var koreaActive = false;
     var wasPlayingBeforeKorea = false;
+    var ufoSrc = 'assets/UFO.mp3';
+    var ufoActive = false;
+    var wasPlayingBeforeUfo = false;
 
     audio.volume = 0.2;
 
@@ -1374,6 +1409,7 @@
     audio.addEventListener('pause', function(){ setPlayingUI(false); });
 
     function openKorea(){
+      if (ufoActive) closeUfo(false);
       wasPlayingBeforeKorea = !audio.paused;
       overlay.classList.add('open');
       overlay.setAttribute('aria-hidden', 'false');
@@ -1406,6 +1442,40 @@
       }
     }
 
+    function openUfo(){
+      if (koreaActive) closeKorea(false);
+      wasPlayingBeforeUfo = !audio.paused;
+      ufoOverlay.classList.add('open');
+      ufoOverlay.setAttribute('aria-hidden', 'false');
+      ufoFrame.src = 'ufo.html';
+      if (audio.getAttribute('src') !== ufoSrc) {
+        audio.pause();
+        audio.loop = false;
+        audio.src = ufoSrc;
+        audio.currentTime = 0;
+        trackLabel.innerHTML = 'NOW PLAYING:<br>UFO.mp3';
+      }
+      ufoActive = true;
+      playAudio().catch(function(){});
+    }
+
+    function closeUfo(resumePlayback){
+      ufoOverlay.classList.remove('open');
+      ufoOverlay.setAttribute('aria-hidden', 'true');
+      ufoFrame.src = 'about:blank';
+      ufoActive = false;
+      audio.pause();
+      audio.loop = true;
+      audio.src = originalSrc;
+      audio.currentTime = 0;
+      trackLabel.innerHTML = 'NOW PLAYING:<br>music.ogg';
+      if (resumePlayback && wasPlayingBeforeUfo) {
+        playAudio().catch(function(){});
+      } else {
+        setPlayingUI(false);
+      }
+    }
+
     badge.addEventListener('click', openKorea);
     badge.addEventListener('keydown', function(e){
       if (e.key === 'Enter' || e.key === ' ') {
@@ -1414,12 +1484,25 @@
       }
     });
 
+    ufoTrigger.addEventListener('click', openUfo);
+    ufoTrigger.addEventListener('keydown', function(e){
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openUfo();
+      }
+    });
+
     overlay.addEventListener('click', function(e){
       if (e.target === overlay) closeKorea(true);
     });
 
+    ufoOverlay.addEventListener('click', function(e){
+      if (e.target === ufoOverlay) closeUfo(true);
+    });
+
     audio.addEventListener('ended', function(){
       if (koreaActive) closeKorea(true);
+      else if (ufoActive) closeUfo(true);
     });
 
     function tryAutoplay() {
@@ -1449,6 +1532,7 @@
         audio.pause();
         setPlayingUI(false);
         if (koreaActive) closeKorea(false);
+        else if (ufoActive) closeUfo(false);
       }
     });
 

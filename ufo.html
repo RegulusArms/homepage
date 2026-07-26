@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>UFO</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    overflow: hidden;
+  }
+
+  .stage {
+    position: fixed;
+    inset: 0;
+  }
+
+  /* ufoRig - the whole assembly (ship + beam + overlay) moves as one unit:
+     flies in from above, hovers in place, flies away. frame2/frame3 are
+     positioned relative to this rig, so they ride along with frame1. */
+  #ufoRig {
+    position: absolute;
+    top: 18%;
+    left: 50%;
+    z-index: 5;
+    transform: translate(-50%, -220px);
+    opacity: 0;
+  }
+  #ufoRig.enter {
+    transition: transform 2s cubic-bezier(0.22, 1, 0.36, 1), opacity 1.2s ease;
+    transform: translate(-50%, 0);
+    opacity: 1;
+  }
+  #ufoRig.hover {
+    animation: ufoHover 3.4s ease-in-out infinite;
+  }
+  #ufoRig.leave {
+    transition: transform 3.5s cubic-bezier(0.55, 0, 0.85, 0.35), opacity 3s ease 0.5s;
+    transform: translate(-50%, -260px);
+    opacity: 0;
+  }
+  @keyframes ufoHover {
+    0%, 100% { transform: translate(-50%, 0); }
+    50% { transform: translate(-50%, -14px); }
+  }
+
+  /* ufo1 - the ship. also the containing block for ufo2, so ufo2's top edge
+     can pin to ufo1's exact rendered vertical center (50% of its own height)
+     instead of a guessed offset. */
+  #frame1 {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    z-index: 3;
+    transform: translate(-50%, 0);
+  }
+  #frame1 img {
+    display: block;
+    max-width: 55vw;
+    max-height: 32vh;
+    width: auto;
+    height: auto;
+  }
+
+  /* wingtip nav lights - positions sampled from the actual pixel coordinates
+     of the two yellow dots in ufo1.png. a dark base circle masks the
+     always-on painted dot so it can appear fully off, with a glow layer
+     that flashes on top for the blink itself. */
+  .nav-light {
+    position: absolute;
+    width: 7.5%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: #06060a;
+    opacity: 0.55;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .nav-light-left { left: 10.2%; top: 67.6%; }
+  .nav-light-right { left: 89.2%; top: 67.1%; }
+  .nav-glow {
+    position: absolute;
+    inset: -35%;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff7c2 0%, #ffd23f 45%, rgba(255, 210, 63, 0) 75%);
+    box-shadow: 0 0 6px 3px rgba(255, 210, 63, 0.85);
+    opacity: 0;
+    animation: navBlink 1.8s ease-in-out infinite;
+  }
+  .nav-light-right .nav-glow {
+    animation-delay: 0.9s;
+  }
+  @keyframes navBlink {
+    0%, 78% { opacity: 0; }
+    82%, 90% { opacity: 0.75; }
+    94%, 100% { opacity: 0; }
+  }
+
+  /* ufo2 - the beam: its top edge pinned to the center (x and y) of ufo1,
+     in front of it, reveals top-to-bottom, wipes out bottom-to-top. also
+     the containing block for ufo3, so ufo3 can anchor to its actual
+     rendered bottom edge. */
+  #frame2 {
+    position: absolute;
+    top: 50%; /* ufo1's exact vertical center, since frame1 wraps tight to its image */
+    left: 50%;
+    z-index: 5;
+    transform: translate(-50%, 0);
+    clip-path: inset(0 0 100% 0);
+  }
+  #frame2 img {
+    display: block;
+    max-width: 45vw;
+    max-height: 55vh;
+    width: auto;
+    height: auto;
+    opacity: 0.5;
+  }
+  #frame2.wipe-in {
+    transition: clip-path 4s ease;
+    clip-path: inset(0 0 0% 0);
+  }
+  #frame2.wipe-out {
+    transition: clip-path 3s ease;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  /* ufo3 - anchored to the bottom of ufo2, 1/3 of ufo2's height */
+  #frame3 {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translate(-50%, 0);
+    opacity: 0;
+  }
+  #frame3 img {
+    display: block;
+    max-width: 45vw;
+    max-height: calc(55vh / 3);
+    width: auto;
+    height: auto;
+    opacity: 0.5;
+  }
+  #frame3.fade-in {
+    transition: opacity 2s ease;
+    opacity: 1;
+  }
+  #frame3.fade-out {
+    transition: opacity 1.5s ease;
+    opacity: 0;
+  }
+</style>
+</head>
+<body>
+<div class="stage">
+  <div id="ufoRig">
+    <div id="frame1">
+      <img src="assets/ufo1.png" alt="">
+      <div class="nav-light nav-light-left"><div class="nav-glow"></div></div>
+      <div class="nav-light nav-light-right"><div class="nav-glow"></div></div>
+      <div id="frame2">
+        <img src="assets/ufo2.png" alt="">
+        <div id="frame3"><img src="assets/ufo3.png" alt=""></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  (function(){
+    var rig = document.getElementById('ufoRig');
+    var frame1 = document.getElementById('frame1');
+    var frame2 = document.getElementById('frame2');
+    var frame3 = document.getElementById('frame3');
+
+    // this page is meant to be embedded as an iframe in index.html, which owns
+    // the actual <audio> element and player controls - same pattern as
+    // korea.html. We read UFO.mp3's playback position off the parent to time
+    // the entrance/exit sequence.
+    var audio;
+    try {
+      audio = window.parent.document.getElementById('bgm');
+    } catch (e) {
+      audio = null;
+    }
+    if (!audio) return;
+
+    var enterStarted = false;
+    var exitStarted = false;
+
+    var ENTER_MS = 2100;      // matches #ufoRig.enter transition + buffer
+    var HOVER_DELAY_MS = 800; // pause before the beam starts
+    var WIPE_IN_MS = 4100;    // matches #frame2.wipe-in transition + buffer
+
+    function startEnterSequence(){
+      if (enterStarted) return;
+      enterStarted = true;
+
+      // force the initial off-screen/opacity:0 state to actually paint before
+      // adding 'enter' - otherwise the browser can batch both style changes
+      // into one calculation and skip the transition entirely, so ufo1 just
+      // pops straight to its resting position instead of flying in
+      requestAnimationFrame(function(){
+        requestAnimationFrame(function(){
+          rig.classList.add('enter');
+        });
+      });
+
+      setTimeout(function(){
+        rig.classList.add('hover');
+      }, ENTER_MS);
+
+      setTimeout(function(){
+        frame2.classList.add('wipe-in');
+      }, ENTER_MS + HOVER_DELAY_MS);
+
+      setTimeout(function(){
+        frame3.classList.add('fade-in');
+      }, ENTER_MS + HOVER_DELAY_MS + WIPE_IN_MS);
+    }
+
+    function startExitSequence(){
+      if (exitStarted) return;
+      exitStarted = true;
+
+      // fade out ufo3 (~1.5s), then wipe out ufo2 bottom-to-top (~3s),
+      // then fly ufo1 away (~3.5s) - sums to the 8s lead-in before the track ends
+      frame3.classList.remove('fade-in');
+      frame3.classList.add('fade-out');
+
+      setTimeout(function(){
+        frame2.classList.remove('wipe-in');
+        frame2.classList.add('wipe-out');
+
+        setTimeout(function(){
+          rig.classList.remove('hover');
+          // force a reflow so the browser locks in a stable starting point
+          // before the 'leave' transition kicks in - otherwise removing the
+          // active hover animation and adding the transition in the same
+          // tick can get batched together and skip straight to the end
+          // state, so the rig just vanishes instead of flying off and fading
+          void rig.offsetWidth;
+          rig.classList.add('leave');
+        }, 3000);
+      }, 1500);
+    }
+
+    function sync(){
+      if (!enterStarted) startEnterSequence();
+      var t = audio.currentTime;
+      var d = audio.duration;
+      if (!exitStarted && d && (d - t) <= 8) startExitSequence();
+    }
+
+    audio.addEventListener('timeupdate', sync);
+    sync();
+  })();
+</script>
+</body>
+</html>
