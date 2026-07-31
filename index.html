@@ -578,6 +578,12 @@
   .alarmclock.settled {
     box-shadow: 0 0 22px rgba(0,255,0,0.5);
   }
+  .alarmclock.settled.level-yellow {
+    box-shadow: 0 0 22px rgba(255,255,0,0.5);
+  }
+  .alarmclock.settled.level-red {
+    box-shadow: 0 0 22px rgba(255,0,0,0.5);
+  }
   .alarmclock .bellrow {
     font-size: 20px;
     margin-bottom: 2px;
@@ -607,6 +613,14 @@
     color: #00ff00;
     text-shadow: 0 0 8px #00ff00, 0 0 22px rgba(0,255,0,0.6);
   }
+  .clockdigits.settle.level-yellow {
+    color: #ffff00;
+    text-shadow: 0 0 8px #ffff00, 0 0 22px rgba(255,255,0,0.6);
+  }
+  .clockdigits.settle.level-red {
+    color: #ff0000;
+    text-shadow: 0 0 8px #ff0000, 0 0 22px rgba(255,0,0,0.6);
+  }
   .clockdigits.flip {
     animation: digitflip 0.15s ease-out;
   }
@@ -624,6 +638,12 @@
   .clocklabel.settle {
     color: #00ff00;
     animation: blinker 1s step-start infinite;
+  }
+  .clocklabel.settle.level-yellow {
+    color: #ffff00;
+  }
+  .clocklabel.settle.level-red {
+    color: #ff0000;
   }
   @media (max-width: 620px) {
     .layout, .row, .sidebar, .mainbar { display: block; width: 100%; }
@@ -1302,6 +1322,17 @@
       '2 DAYS'
     ];
 
+    function backlogLevel(str){
+      var m = /([\d,.]+)\s*(DAY|WEEK|MONTH|YR)/i.exec(str);
+      if (!m) return 'level-red';
+      var n = parseFloat(m[1].replace(/,/g, ''));
+      var unit = m[2].toUpperCase();
+      var days = unit === 'DAY' ? n : unit === 'WEEK' ? n * 7 : unit === 'MONTH' ? n * 30 : n * 365;
+      if (days <= 2) return 'level-green';
+      if (days <= 6) return 'level-yellow';
+      return 'level-red';
+    }
+
     var i = 0;
     function tick(){
       digits.textContent = steps[i];
@@ -1314,9 +1345,10 @@
         var delay = 60 + Math.pow(progress, 2.4) * 850;
         setTimeout(tick, delay);
       } else {
-        digits.classList.add('settle');
-        clock.classList.add('settled');
-        label.classList.add('settle');
+        var level = backlogLevel(steps[steps.length - 1]);
+        digits.classList.add('settle', level);
+        clock.classList.add('settled', level);
+        label.classList.add('settle', level);
         label.textContent = 'CURRENT BACKLOG - THANKS FOR YOUR PATIENCE';
       }
     }
