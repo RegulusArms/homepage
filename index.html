@@ -319,6 +319,41 @@
     justify-content: center;
     margin: 12px 0;
   }
+  .gallery-viewport {
+    overflow: hidden;
+    margin: 12px 0;
+  }
+  .gallery-track {
+    display: flex;
+    transition: transform 0.6s ease;
+  }
+  .gallery-page {
+    min-width: 100%;
+    box-sizing: border-box;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+  }
+  .gallery-dots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .gallery-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #000;
+    border: 2px solid #00ffff;
+    padding: 0;
+    cursor: pointer;
+  }
+  .gallery-dot.active {
+    background: #00ffff;
+    box-shadow: 0 0 6px #00ffff;
+  }
   .polaroid {
     background: #fff;
     padding: 8px 8px 24px 8px;
@@ -412,6 +447,11 @@
     color: #00ff00;
   }
   table.pricelist tr:nth-child(even) td { background: #110022; }
+  table.pricelist td.oos {
+    color: #ff0000;
+    font-weight: bold;
+    animation: blinker 1s step-start infinite;
+  }
   .guestbook {
     border: 3px ridge #ffff00;
     background: #000;
@@ -949,7 +989,7 @@
         </ul>
         <h3>NOW PRINTING</h3>
         <div class="counterbox">
-          <div class="odometer" id="hitcounter">004217</div>
+          <div class="odometer" id="hitcounter">004312</div>
           <div style="font-size:11px; color:#ffff00;">mags printed since 1998*</div>
           <div style="font-size:9px; color:#888;">*not really 1998</div>
         </div>
@@ -1074,10 +1114,11 @@
           <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td>$17.76+S&amp;H</td></tr>
           <tr><td>UV Printed PMAG, Customer Supplied</td><td>$13.99+S&amp;H</td></tr>
           <tr><td>Custom 1911 Pistol Grip Set</td><td>$19.95</td></tr>
-          <tr><td>Custom 2in Rail Cover</td><td>coming soon</td></tr>
-          <tr><td>Custom 2in Rail Cover Keychain</td><td>coming soon</td></tr>
-          <tr><td>Custom 3in Rail Cover</td><td>coming soon</td></tr>
-          <tr><td>Custom 3in Rail Cover Keychain<</td><td>coming soon</td></tr>
+          <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td>coming soon</td></tr>
+          <tr><td>Custom 2in Rail Cover</td><td class="oos">OUT OF STOCK</td></tr>
+          <tr><td>Custom 2in Rail Cover Keychain</td><td class="oos">OUT OF STOCK</td></tr>
+          <tr><td>Custom 3in Rail Cover</td><td class="oos">OUT OF STOCK</td></tr>
+          <tr><td>Custom 3in Rail Cover Keychain</td><td class="oos">OUT OF STOCK</td></tr>
           <tr><td>Regulus Arms AR-15 Lower Receiver</td><td>coming soon</td></tr>
         </table>
         <p style="font-size:12px; color:#ff9900;">
@@ -1239,6 +1280,76 @@
   })();
 
   (function(){
+    var gallery = document.querySelector('.gallery');
+    if (!gallery) return;
+    var items = Array.prototype.slice.call(gallery.children).filter(function(el){
+      return el.classList.contains('polaroid');
+    });
+    if (!items.length) return;
+
+    var PER_PAGE = 6;
+    var pages = [];
+    for (var i = 0; i < items.length; i += PER_PAGE) pages.push(items.slice(i, i + PER_PAGE));
+
+    var viewport = document.createElement('div');
+    viewport.className = 'gallery-viewport';
+    var track = document.createElement('div');
+    track.className = 'gallery-track';
+
+    pages.forEach(function(pageItems){
+      var page = document.createElement('div');
+      page.className = 'gallery-page';
+      pageItems.forEach(function(item){ page.appendChild(item); });
+      track.appendChild(page);
+    });
+
+    viewport.appendChild(track);
+    gallery.parentNode.replaceChild(viewport, gallery);
+
+    if (pages.length <= 1) return;
+
+    var dotsWrap = document.createElement('div');
+    dotsWrap.className = 'gallery-dots';
+    var current = 0;
+
+    function goTo(idx){
+      current = (idx + pages.length) % pages.length;
+      track.style.transform = 'translateX(-' + (current * 100) + '%)';
+      dots.forEach(function(d, i){ d.classList.toggle('active', i === current); });
+    }
+
+    var dots = pages.map(function(_, idx){
+      var dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'gallery-dot' + (idx === 0 ? ' active' : '');
+      dot.setAttribute('aria-label', 'Go to gallery page ' + (idx + 1));
+      dot.addEventListener('click', function(){ goTo(idx); resetTimer(); });
+      dotsWrap.appendChild(dot);
+      return dot;
+    });
+
+    viewport.parentNode.insertBefore(dotsWrap, viewport.nextSibling);
+
+    var INTERVAL = 4500;
+    var timer = null;
+    function startTimer(){
+      stopTimer();
+      timer = setInterval(function(){ goTo(current + 1); }, INTERVAL);
+    }
+    function stopTimer(){
+      if (timer) { clearInterval(timer); timer = null; }
+    }
+    function resetTimer(){ startTimer(); }
+
+    viewport.addEventListener('mouseenter', stopTimer);
+    viewport.addEventListener('mouseleave', startTimer);
+    viewport.addEventListener('focusin', stopTimer);
+    viewport.addEventListener('focusout', startTimer);
+
+    startTimer();
+  })();
+
+  (function(){
     document.querySelectorAll('.starburst').forEach(function(el){
       el.style.setProperty('--dir', Math.random() < 0.5 ? 1 : -1);
       el.classList.add('spin-in');
@@ -1383,7 +1494,7 @@
 
   (function(){
     var el = document.getElementById('hitcounter');
-    var n = 4217;
+    var n = 4312;
     setInterval(function(){
       if (Math.random() < 0.3) n++;
       el.textContent = String(n).padStart(6,'0');
