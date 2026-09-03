@@ -1031,79 +1031,7 @@
         <hr class="hr90">
         <h2 class="section" id="gallery">GALLERY.HTML</h2>
         <p>a few recent pieces fresh off the printer:</p>
-        <div class="gallery">
-
-          <div class="polaroid" style="--r:-4deg;">
-            <div class="swatch"><img src="img/mag-noodles.jpg" alt="Late Night Noodles mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"Late Night Noodles"</div>
-            <div class="cal">5.56 X 45 UV print</div>
-          </div>
-
-          <div class="polaroid" style="--r:3deg;">
-            <div class="swatch"><img src="img/mag-manga.jpg" alt="Manga panel mag" loading="lazy" decoding="async"></div>
-            <div class="cap">Manga Panel Mag</div>
-            <div class="cal">b&amp;w halftone UV print</div>
-          </div>
-
-          <div class="polaroid" style="--r:-2deg;">
-            <div class="swatch"><img src="img/mag-crane.jpg" alt="Crane and lotus mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"Crane &amp; Lotus" mag</div>
-            <div class="cal">5.56 X 45 succulent chinese art</div>
-          </div>
-
-          <div class="polaroid" style="--r:5deg;">
-            <div class="swatch"><img src="img/mag-mars.jpg" alt="Mars mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"Red Planet" Mars mag</div>
-            <div class="cal">5.56 X 45 planetary series</div>
-          </div>
-
-          <div class="polaroid" style="--r:-5deg;">
-            <div class="spicy">18+</div>
-            <div class="swatch"><img src="img/mag-devil.jpg" alt="American Devil mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"American Devil" mag</div>
-            <div class="cal">.300 Blackout</div>
-          </div>
-
-          <div class="polaroid" style="--r:2deg;">
-            <div class="swatch"><img src="img/mag-alien-gold.jpg" alt="Gold alien mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"bold and brash"</div>
-            <div class="cal">5.56 X 45</div>
-          </div>
-
-          <div class="polaroid" style="--r:-3deg;">
-            <div class="swatch"><img src="img/mag-ufo.jpg" alt="UFOs Are Real mag" loading="lazy" decoding="async"></div>
-            <div class="cap">"UFOs Are Real" mag</div>
-            <div class="cal">5.56 X 45 UFO series</div>
-          </div>
-
-          <div class="polaroid" style="--r:4deg;">
-            <div class="spicy">18+</div>
-            <div class="swatch"><img src="img/mag-island.jpg" alt="Island pinup mag" loading="lazy" decoding="async"></div>
-            <div class="cap">NIKKE Pinup Mag</div>
-            <div class="cal">5.56 X 45 UV print</div>
-          </div>
-
-          <div class="polaroid" style="--r:-4.5deg;">
-            <div class="spicy">18+</div>
-            <div class="swatch"><img src="img/grip-island-1.jpg" alt="Island pinup grip panel, blonde" loading="lazy" decoding="async"></div>
-            <div class="cap">NIKKE Grip Panel #1</div>
-            <div class="cal">custom fit, hand cut</div>
-          </div>
-
-          <div class="polaroid" style="--r:3.5deg;">
-            <div class="spicy">18+</div>
-            <div class="swatch"><img src="img/grip-island-2.jpg" alt="Island pinup grip panel, beret girl" loading="lazy" decoding="async"></div>
-            <div class="cap">NIKKE Grip Panel #2</div>
-            <div class="cal">custom fit, hand cut</div>
-          </div>
-
-          <div class="polaroid" style="--r:3.5deg;">
-            <div class="swatch"><img src="img/IMG_2104.JPEG" alt="Custom Rail Covers" loading="lazy" decoding="async"></div>
-            <div class="cap">Custom Rail Covers</div>
-            <div class="cal">friction fit, custom images</div>
-          </div>
-
-        </div>
+        <div class="gallery" id="gallery-photos"></div>
         <p style="text-align:center; font-size:12px; color:#00ffff;">
           got a theme in mind? we can do full custom art &mdash; anime, manga panel UV prints,
           americana, movie homages, your OC, your unit patch, your dog, anime waifus.  send a ref pic.
@@ -1228,7 +1156,7 @@
     italy.addEventListener('ended', function(){ h1.classList.remove('italy-mode'); });
   })();
 
-  (function(){
+  function wirePolaroidPopups(){
     document.querySelectorAll('.polaroid').forEach(function(card){
       var img = card.querySelector('.swatch img');
       if (!img) return;
@@ -1259,9 +1187,9 @@
       card.addEventListener('focus', open);
       card.addEventListener('blur', close);
     });
-  })();
+  }
 
-  (function(){
+  function buildGallerySlider(){
     var gallery = document.querySelector('.gallery');
     if (!gallery) return;
     var items = Array.prototype.slice.call(gallery.children).filter(function(el){
@@ -1329,6 +1257,81 @@
     viewport.addEventListener('focusout', startTimer);
 
     startTimer();
+  }
+
+  (function(){
+    var GALLERY_DIR = 'img/gallery/';
+    var gallery = document.getElementById('gallery-photos');
+    if (!gallery) return;
+
+    function parseMeta(text){
+      var lines = text.split(/\r\n|\r|\n/);
+      return {
+        spicy: (lines[0] || '').trim().toLowerCase() === 'true',
+        cap: (lines[1] || '').trim(),
+        cal: (lines[2] || '').trim(),
+        alt: (lines[3] || '').trim()
+      };
+    }
+
+    fetch(GALLERY_DIR + 'manifest.json')
+      .then(function(res){ return res.json(); })
+      .then(function(files){
+        return Promise.all(files.map(function(file){
+          var base = file.replace(/\.[^.]+$/, '');
+          return fetch(GALLERY_DIR + base + '.txt')
+            .then(function(res){ return res.text(); })
+            .then(function(text){ return { file: file, meta: parseMeta(text) }; })
+            .catch(function(){ return null; });
+        }));
+      })
+      .then(function(entries){
+        var shuffled = entries.filter(Boolean);
+        for (var i = shuffled.length - 1; i > 0; i--) {
+          var j = Math.floor(Math.random() * (i + 1));
+          var tmp = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = tmp;
+        }
+        shuffled.forEach(function(entry){
+          var card = document.createElement('div');
+          card.className = 'polaroid';
+          card.style.setProperty('--r', (Math.random() * 9 - 4.5).toFixed(1) + 'deg');
+
+          if (entry.meta.spicy) {
+            var spicy = document.createElement('div');
+            spicy.className = 'spicy';
+            spicy.textContent = '18+';
+            card.appendChild(spicy);
+          }
+
+          var swatch = document.createElement('div');
+          swatch.className = 'swatch';
+          var img = document.createElement('img');
+          img.src = GALLERY_DIR + entry.file;
+          img.alt = entry.meta.alt;
+          img.loading = 'lazy';
+          img.decoding = 'async';
+          swatch.appendChild(img);
+          card.appendChild(swatch);
+
+          var cap = document.createElement('div');
+          cap.className = 'cap';
+          cap.textContent = entry.meta.cap;
+          card.appendChild(cap);
+
+          var cal = document.createElement('div');
+          cal.className = 'cal';
+          cal.textContent = entry.meta.cal;
+          card.appendChild(cal);
+
+          gallery.appendChild(card);
+        });
+
+        wirePolaroidPopups();
+        buildGallerySlider();
+      })
+      .catch(function(err){
+        console.error('gallery load failed', err);
+      });
   })();
 
   (function(){
