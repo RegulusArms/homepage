@@ -460,6 +460,26 @@
     font-weight: bold;
     animation: blinker 1s step-start infinite;
   }
+  table.pricelist .offline-msg {
+    display: none;
+    color: #ffff00;
+    font-weight: bold;
+    animation: blinker 1s step-start infinite;
+  }
+  .shop-offline table.pricelist .price { display: none; }
+  .shop-offline table.pricelist .offline-msg { display: inline; }
+  .backlog-offline { display: none; }
+  .shop-offline .backlog-offline { display: block; }
+  .shop-offline #backlogClock { display: none; }
+  .backlog-offline .maint-title {
+    font-family: "Courier New", monospace;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #ffff00;
+    text-shadow: 0 0 8px #ffff00, 0 0 22px rgba(255,255,0,0.6);
+    animation: blinker 1s step-start infinite;
+  }
   .guestbook {
     border: 3px ridge #ffff00;
     background: #000;
@@ -926,7 +946,7 @@
   }
 </style>
 </head>
-<body>
+<body class="shop-offline"><!-- remove class "shop-offline" from <body> to bring the shop + backlog clock back online -->
 <div class="starfield-a" aria-hidden="true"></div>
 <div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
@@ -1030,6 +1050,11 @@
             <div class="clockdigits" id="backlogDigits">CALCULATING...</div>
             <div class="clocklabel" id="backlogLabel">ESTIMATED TIME UNTIL YOUR ORDER SHIPS</div>
           </div>
+          <div class="alarmclock backlog-offline" id="backlogOffline" style="box-shadow:0 0 22px rgba(255,255,0,0.5);">
+            <div class="bellrow">&#128295;</div>
+            <div class="maint-title">UV PRINTER MAINTENANCE</div>
+            <div class="clocklabel">all custom items are currently unavailable as we wait for parts</div>
+          </div>
         </div>
         <hr class="hr90">
         <h2 class="section" id="gallery">GALLERY.HTML</h2>
@@ -1043,11 +1068,11 @@
         <h2 class="section" id="pricing">ORDER INFO</h2>
         <table class="pricelist">
           <tr><th>ITEM</th><th>PRICE</th></tr>
-          <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td>$17.76+S&amp;H</td></tr>
+          <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td><span class="price">$17.76+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
           <tr><td>UV Printed PMAG, Customer Supplied</td><td class="unavail">UNAVAILABLE</td></tr>
-          <tr><td>Custom 1911 Pistol Grip Set</td><td>$21+S&amp;H</td></tr>
-          <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td>$27+S&amp;H</td></tr>
-          <tr><td>Regulus Arms AR-15 Lower Receiver</td><td>coming soon</td></tr>
+          <tr><td>Custom 1911 Pistol Grip Set</td><td><span class="price">$21+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
+          <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td><span class="price">$27+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
+          <tr><td>Regulus Arms AR-15 Lower Receiver</td><td><span class="price">coming soon</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
         </table>
         <p style="font-size:12px; color:#ff9900;">
           <span class="blink">&#9888;</span> check the listing for available designs, or use the customization tools in the sitemap to make a layout for your design.
@@ -1416,7 +1441,7 @@
     var digits = document.getElementById('backlogDigits');
     var clock = document.getElementById('backlogClock');
     var label = document.getElementById('backlogLabel');
-    if (!digits) return;
+    if (!digits || document.body.classList.contains('shop-offline')) return;
 
     var steps = [
       '4,819,203 YRS',
