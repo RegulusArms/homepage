@@ -471,10 +471,20 @@
   }
   .shop-offline table.pricelist .price:not(.always-on) { display: none; }
   .shop-offline table.pricelist .offline-msg { display: inline; }
+  .shop-offline:not(.shop-vacation) table.pricelist .always-on + .offline-msg { display: none; }
   .alarmclock.backlog-offline { display: none; }
   .shop-offline .alarmclock.backlog-offline { display: block; }
   .shop-offline #backlogClock { display: none; }
-  .backlog-offline .maint-title {
+  /* vacation mode: add class "shop-vacation" to <body> */
+  .shop-vacation table.pricelist .price { display: none; }
+  .shop-vacation table.pricelist .offline-msg { display: inline; }
+  .alarmclock.backlog-vacation { display: none; }
+  .shop-vacation .alarmclock.backlog-vacation { display: block; }
+  .shop-vacation #backlogClock,
+  .shop-vacation .alarmclock.backlog-offline,
+  .shop-vacation .order-btn { display: none; }
+  .backlog-offline .maint-title,
+  .backlog-vacation .maint-title {
     font-family: "Courier New", monospace;
     font-size: 28px;
     font-weight: bold;
@@ -949,7 +959,7 @@
   }
 </style>
 </head>
-<body>
+<body class="shop-vacation"><!-- add class="shop-offline" for UV printer maintenance, or class="shop-vacation" to stop taking orders -->
 <div class="starfield-a" aria-hidden="true"></div>
 <div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
@@ -1060,6 +1070,11 @@
             <div class="maint-title">UV PRINTER MAINTENANCE</div>
             <div class="clocklabel">all custom items are currently unavailable as we wait for parts</div>
           </div>
+          <div class="alarmclock backlog-vacation" id="backlogVacation" style="box-shadow:0 0 22px rgba(255,255,0,0.5);">
+            <div class="bellrow">&#127796;</div>
+            <div class="maint-title">GONE ON VACATION</div>
+            <div class="clocklabel">we are temporarily not accepting orders &mdash; we will be back soon!</div>
+          </div>
         </div>
         <hr class="hr90">
         <h2 class="section" id="gallery">GALLERY.HTML</h2>
@@ -1077,12 +1092,12 @@
           <tr><td>UV Printed PMAG, Customer Supplied</td><td class="unavail">UNAVAILABLE</td></tr>
           <tr><td>Custom 1911 Pistol Grip Set</td><td><span class="price">$21+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
           <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td><span class="price">$27+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
-          <tr><td>Regulus Arms AR-15 Lower Receiver</td><td><span class="price always-on">$129.99+S&amp;H</span></td></tr>
+          <tr><td>Regulus Arms AR-15 Lower Receiver</td><td><span class="price always-on">$129.99+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
         </table>
         <p style="font-size:12px; color:#ff9900;">
           <span class="blink">&#9888;</span> check the listing for available designs, or use the customization tools in the sitemap to make a layout for your design.
         </p>
-        <div style="text-align:center; margin:14px 0;">
+        <div class="order-btn" style="text-align:center; margin:14px 0;">
           <a href="https://custom.regulusarms.com/" target="_blank" rel="noopener" style="
             background:#00ff66; color:#000; font-weight:bold; font-size:20px;
             padding:10px 24px; border:4px outset #00ff66; text-decoration:none;
@@ -1446,7 +1461,7 @@
     var digits = document.getElementById('backlogDigits');
     var clock = document.getElementById('backlogClock');
     var label = document.getElementById('backlogLabel');
-    if (!digits || document.body.classList.contains('shop-offline')) return;
+    if (!digits || document.body.classList.contains('shop-offline') || document.body.classList.contains('shop-vacation')) return;
 
     var steps = [
       '4,819,203 YRS',
