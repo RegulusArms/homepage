@@ -483,6 +483,53 @@
   .shop-vacation #backlogClock,
   .shop-vacation .alarmclock.backlog-offline,
   .shop-vacation .order-btn { display: none; }
+  /* sale mode: add class "shop-sale" to <body> (offline/vacation still win) */
+  table.pricelist .sale-price,
+  .sale-banner { display: none; }
+  .shop-sale table.pricelist .sale-price {
+    display: inline;
+    margin-left: 8px;
+    color: #ff9900;
+    font-weight: bold;
+    text-shadow: 0 0 6px #ff6600;
+  }
+  .shop-sale table.pricelist .sale-price::before { content: "\1F383  "; }
+  .shop-sale table.pricelist .price.has-sale {
+    color: #888;
+    text-decoration: line-through;
+    text-decoration-color: #ff0000;
+    text-decoration-thickness: 2px;
+  }
+  .shop-sale .sale-banner {
+    display: block;
+    margin: 0 auto 12px;
+    padding: 10px;
+    text-align: center;
+    background: #1a0026;
+    border: 4px ridge #ff6600;
+    box-shadow: 0 0 22px rgba(255,102,0,0.55);
+  }
+  .sale-banner .sale-title {
+    font-family: "Courier New", monospace;
+    font-size: 26px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #ff9900;
+    text-shadow: 0 0 8px #ff6600, 0 0 20px #9900ff;
+    animation: spookyflicker 3s infinite;
+  }
+  .sale-banner .sale-sub {
+    font-size: 13px;
+    color: #cc99ff;
+  }
+  @keyframes spookyflicker {
+    0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+    20%, 24%, 55% { opacity: 0.25; }
+  }
+  .shop-offline table.pricelist .sale-price,
+  .shop-vacation table.pricelist .sale-price,
+  .shop-offline .sale-banner,
+  .shop-vacation .sale-banner { display: none; }
   .backlog-offline .maint-title,
   .backlog-vacation .maint-title {
     font-family: "Courier New", monospace;
@@ -959,7 +1006,7 @@
   }
 </style>
 </head>
-<body class="shop-vacation"><!-- add class="shop-offline" for UV printer maintenance, or class="shop-vacation" to stop taking orders -->
+<body class="shop-sale"><!-- add class="shop-offline" for UV printer maintenance, class="shop-vacation" to stop taking orders, or class="shop-sale" for sale prices -->
 <div class="starfield-a" aria-hidden="true"></div>
 <div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
@@ -1086,12 +1133,23 @@
         </p>
         <hr class="hr90">
         <h2 class="section" id="pricing">ORDER INFO</h2>
+        <div class="sale-banner">
+          <div class="logo-wrap" tabindex="0">
+            <div class="sale-title">&#127875; HALLOWEEN SPOOKY SALE &#127875;</div>
+            <div class="questpopup">
+              <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
+              <center style="color:#ff9900;">The Halloween Spooky Sale is only on GunBroker.</center>
+              <div class="questfooter">&#128123;</div>
+            </div>
+          </div>
+          <div class="sale-sub">&#129415; frightfully low prices on custom grip sets &mdash; while the spirits last &#128123;</div>
+        </div>
         <table class="pricelist">
           <tr><th>ITEM</th><th>PRICE</th></tr>
           <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td class="unavail oos">OUT OF STOCK</td></tr>
           <tr><td>UV Printed PMAG, Customer Supplied</td><td class="unavail">UNAVAILABLE</td></tr>
-          <tr><td>Custom 1911 Pistol Grip Set</td><td><span class="price">$21+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
-          <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td><span class="price">$27+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
+          <tr><td>Custom 1911 Pistol Grip Set</td><td><span class="price has-sale">$21+S&amp;H</span><span class="sale-price">$17.76+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
+          <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td><span class="price has-sale">$27+S&amp;H</span><span class="sale-price">$19.99+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
           <tr><td>Regulus Arms AR-15 Lower Receiver</td><td><span class="price always-on">$129.99+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
         </table>
         <p style="font-size:12px; color:#ff9900;">
@@ -1477,7 +1535,7 @@
       '12 WEEKS',
       '6 WEEKS',
       '9 DAYS',
-      '3 DAYS'
+      '2 DAYS'
     ];
 
     function backlogLevel(str){
