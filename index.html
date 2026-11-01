@@ -812,6 +812,39 @@
     text-shadow: 0 0 8px #ffff00, 0 0 22px rgba(255,255,0,0.6);
     animation: blinker 1s step-start infinite;
   }
+  /* christmas mode maintenance box: santa's workshop */
+  .xmas-only { display: none; }
+  .christmas-mode .backlog-offline .xmas-only { display: block; }
+  .christmas-mode .backlog-offline .normal-only { display: none; }
+  .christmas-mode .alarmclock.backlog-offline {
+    position: relative;
+    margin-top: 10px;
+    padding: 22px 30px 16px;
+    background: linear-gradient(180deg, #06240f, #001208);
+    border: 6px solid #ff1a1a;
+    border-image: repeating-linear-gradient(-45deg, #ff1a1a 0, #ff1a1a 10px, #fff 10px, #fff 20px) 6;
+    box-shadow: 0 0 24px rgba(255,32,32,0.55), 0 0 10px rgba(0,255,102,0.35) inset !important; /* beats the inline glow */
+  }
+  .christmas-mode .backlog-offline .xmas-snowcap {
+    top: 0;
+  }
+  .christmas-mode .backlog-offline .bellrow {
+    font-size: 26px;
+    letter-spacing: 6px;
+  }
+  .christmas-mode .backlog-offline .maint-title {
+    color: #ffffff;
+    text-shadow: 0 0 8px #ff1a1a, 0 0 20px #00ff66;
+    animation: xmaslights 1.6s step-start infinite;
+  }
+  .christmas-mode .backlog-offline .clocklabel { color: #99ffbb; }
+  .christmas-mode .backlog-offline .elf-note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ffd700;
+    font-style: italic;
+  }
+  .christmas-mode.shop-offline table.pricelist .offline-msg { color: #ff3333; text-shadow: 0 0 6px #00ff66; }
   .guestbook {
     border: 3px ridge #ffff00;
     background: #000;
@@ -1505,9 +1538,12 @@
             <div class="clocklabel" id="backlogLabel">ESTIMATED TIME UNTIL YOUR ORDER SHIPS</div>
           </div>
           <div class="alarmclock backlog-offline" id="backlogOffline" style="box-shadow:0 0 22px rgba(255,255,0,0.5);">
-            <div class="bellrow">&#128295;</div>
+            <div class="xmas-snowcap xmas-only"></div>
+            <div class="bellrow normal-only">&#128295;</div>
+            <div class="bellrow xmas-only">&#127876;&#128295;&#127873;</div>
             <div class="maint-title">UV PRINTER MAINTENANCE</div>
             <div class="clocklabel">all custom items are currently unavailable as we wait for parts</div>
+            <div class="elf-note xmas-only">&#127877; santa's elves are working on the printer &mdash; parts are on the sleigh &#128759;</div>
           </div>
           <div class="alarmclock backlog-vacation" id="backlogVacation" style="box-shadow:0 0 22px rgba(255,255,0,0.5);">
             <div class="bellrow">&#127796;</div>
