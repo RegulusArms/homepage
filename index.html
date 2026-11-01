@@ -115,6 +115,105 @@
     z-index: -1;
     pointer-events: none;
   }
+  /* christmas mode snow (flakes are added by the christmas-mode script) */
+  .snowfall {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    z-index: 900;
+    pointer-events: none;
+  }
+  .snowflake {
+    position: absolute;
+    top: -40px;
+    color: #fff;
+    text-shadow: 0 0 6px #aaddff;
+    user-select: none;
+    animation: snowfall linear infinite, snowsway ease-in-out infinite alternate;
+  }
+  @keyframes snowfall {
+    to { top: 105vh; }
+  }
+  @keyframes snowsway {
+    from { transform: translateX(-25px) rotate(0deg); }
+    to   { transform: translateX(25px) rotate(180deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .snowfall { display: none; }
+  }
+  /* christmas mode lights + corner trees (built by the christmas-mode script) */
+  .xmas-frame {
+    position: fixed;
+    inset: 0;
+    z-index: 901;
+    pointer-events: none;
+  }
+  .light-string {
+    position: absolute;
+    display: flex;
+    justify-content: space-around;
+    align-items: flex-start;
+  }
+  .light-string.top,
+  .light-string.bottom { left: 0; right: 0; height: 22px; border-top: 2px solid #0b3d16; }
+  .light-string.top { top: 0; }
+  .light-string.bottom { bottom: 0; transform: scaleY(-1); }
+  .light-string.left,
+  .light-string.right { top: 0; bottom: 0; width: 22px; flex-direction: column; align-items: flex-start; border-left: 2px solid #0b3d16; }
+  .light-string.left { left: 0; }
+  .light-string.right { right: 0; transform: scaleX(-1); }
+  .light-string.left .bulb,
+  .light-string.right .bulb { transform: rotate(-90deg); margin-left: 2px; }
+  .bulb {
+    width: 9px;
+    height: 14px;
+    margin-top: 2px;
+    border-radius: 50% 50% 50% 50% / 40% 40% 60% 60%;
+    background: currentColor;
+    box-shadow: 0 0 6px 2px currentColor;
+    position: relative;
+    animation: bulbblink 1.2s step-start infinite;
+  }
+  .bulb::before {
+    content: "";
+    position: absolute;
+    top: -3px;
+    left: 2px;
+    width: 5px;
+    height: 4px;
+    background: #2a5a2a;
+    border-radius: 1px;
+  }
+  .bulb:nth-child(4n+1) { color: #ff2020; }
+  .bulb:nth-child(4n+2) { color: #20ff60; }
+  .bulb:nth-child(4n+3) { color: #ffd800; }
+  .bulb:nth-child(4n)   { color: #2a8cff; }
+  .bulb:nth-child(even) { animation-delay: 0.6s; }
+  @keyframes bulbblink {
+    0%   { opacity: 1; }
+    50%  { opacity: 0.25; box-shadow: none; }
+  }
+  .xmas-tree {
+    position: absolute;
+    font-size: 46px;
+    line-height: 1;
+    filter: drop-shadow(0 0 8px rgba(0,255,102,0.6));
+    animation: treetwinkle 1.6s ease-in-out infinite alternate;
+  }
+  .xmas-tree.tl { top: 6px; left: 6px; }
+  .xmas-tree.tr { top: 6px; right: 6px; animation-delay: 0.4s; }
+  .xmas-tree.bl { bottom: 6px; left: 6px; animation-delay: 0.8s; }
+  .xmas-tree.br { bottom: 6px; right: 6px; animation-delay: 1.2s; }
+  @keyframes treetwinkle {
+    from { filter: drop-shadow(0 0 4px rgba(255,216,0,0.5)); }
+    to   { filter: drop-shadow(0 0 14px rgba(0,255,102,0.9)); }
+  }
+  @media (max-width: 700px) {
+    .xmas-tree { font-size: 30px; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bulb, .xmas-tree { animation: none; }
+  }
   .floatpath {
     position: absolute;
     width: 150px;
@@ -133,6 +232,10 @@
   .floatpath2 { top: 55%; left: 78%; width: 130px; animation: drift2 50s ease-in-out infinite; }
   .floatpath3 { top: 18%; left: 60%; width: 140px; animation: drift3 37s ease-in-out infinite; }
   .floatpath4 { top: 68%; left: 8%; width: 125px; animation: drift4 55s ease-in-out infinite; }
+  .christmas-mode .floatpath1 { width: 225px; }
+  .christmas-mode .floatpath2 { width: 195px; }
+  .christmas-mode .floatpath3 { width: 210px; }
+  .christmas-mode .floatpath4 { width: 188px; }
   @keyframes drift1 {
     0%   { transform: translate(0, 0); }
     25%  { transform: translate(65vw, 15vh); }
@@ -196,6 +299,82 @@
       0 0 20px #ff00ff;
     transform: skew(-3deg);
   }
+  /* christmas mode logo: candy cane letters with snow on top + a little winter scene */
+  .christmas-mode .titleblock {
+    border-color: #ff2020;
+    background: linear-gradient(180deg, #06240f 0, #06240f 300px, #330033 420px);
+    box-shadow: 0 0 0 3px #0b8a2e, 0 0 24px rgba(255,32,32,0.45);
+  }
+  .christmas-mode .titleblock h1:not(.italy-mode) {
+    color: #fff;
+    background: repeating-linear-gradient(-45deg,
+      #ff1a1a 0, #ff1a1a 9px,
+      #ffffff 9px, #ffffff 16px);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+    filter:
+      drop-shadow(0 -3px 0 #ffffff)
+      drop-shadow(3px 3px 0 #0b8a2e)
+      drop-shadow(0 0 10px rgba(255,255,255,0.7));
+    animation: candyshift 6s linear infinite;
+  }
+  @keyframes candyshift {
+    to { background-position: 90px 0; }
+  }
+  .xmas-scene,
+  .xmas-ground { display: none; }
+  .christmas-mode .xmas-scene { display: block; }
+  .christmas-mode .xmas-ground {
+    display: block;
+    position: relative;
+    height: 74px;
+    margin: 4px -10px 10px;
+  }
+  .xmas-scene span,
+  .xmas-ground span {
+    position: absolute;
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.6));
+  }
+  .xmas-snowcap {
+    position: absolute;
+    left: 0; right: 0; top: 0;
+    height: 14px;
+    background:
+      radial-gradient(circle at 10px 0, #fff 9px, transparent 10px) 0 0 / 20px 14px repeat-x,
+      linear-gradient(#fff, #fff) 0 0 / 100% 4px no-repeat;
+    pointer-events: none;
+  }
+  .xmas-snowbank {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 26px;
+    background:
+      radial-gradient(ellipse 34px 22px at 30px 100%, #fff 96%, transparent 100%) 0 100% / 60px 26px repeat-x,
+      linear-gradient(#e8f4ff, #fff) 0 100% / 100% 10px no-repeat;
+    pointer-events: none;
+  }
+  .xmas-ground .tree-big  { font-size: 64px; bottom: 8px; }
+  .xmas-ground .tree-small { font-size: 40px; bottom: 10px; }
+  .xmas-ground .snowman { font-size: 46px; bottom: 10px; }
+  .xmas-ground .present { font-size: 26px; bottom: 8px; }
+  .xmas-scene .flank { font-size: 38px; top: 58px; animation: flankbob 2.4s ease-in-out infinite alternate; }
+  @keyframes flankbob {
+    from { transform: translateY(0) rotate(-6deg); }
+    to   { transform: translateY(-6px) rotate(6deg); }
+  }
+  @media (max-width: 700px) {
+    .xmas-scene .flank,
+    .xmas-ground .tree-small,
+    .xmas-ground .hide-sm { display: none; }
+    .xmas-ground .tree-big { font-size: 44px; }
+    .xmas-ground .snowman { font-size: 32px; }
+    .xmas-ground .present { font-size: 20px; }
+  }
   .titleblock h1.italy-mode {
     color: #fff;
     background: linear-gradient(90deg,
@@ -245,6 +424,73 @@
   @keyframes starburst-pulse {
     0%, 100% { transform: rotate(-8deg) scale(1); }
     50% { transform: rotate(-8deg) scale(1.15); }
+  }
+  /* christmas mode: badges become a tree, a gingerbread man and an ornament */
+  :root {
+    --xmas-gingerbread: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115'%3E%3Cg stroke='%23b5651d' stroke-linecap='round'%3E%3Cline x1='32' y1='46' x2='9' y2='62' stroke-width='17'/%3E%3Cline x1='68' y1='46' x2='91' y2='62' stroke-width='17'/%3E%3Cline x1='41' y1='82' x2='29' y2='106' stroke-width='19'/%3E%3Cline x1='59' y1='82' x2='71' y2='106' stroke-width='19'/%3E%3C/g%3E%3Crect x='25' y='32' width='50' height='56' rx='16' fill='%23b5651d'/%3E%3Ccircle cx='50' cy='20' r='18' fill='%23b5651d'/%3E%3Ccircle cx='44' cy='16' r='2.6' fill='%23fff'/%3E%3Ccircle cx='56' cy='16' r='2.6' fill='%23fff'/%3E%3Cpath d='M43 25 Q50 31 57 25' fill='none' stroke='%23fff' stroke-width='2' stroke-linecap='round'/%3E%3Cg fill='none' stroke='%23fff' stroke-width='2' stroke-linejoin='round'%3E%3Cpath d='M4 54 L7 59 L10 54 L13 59 L16 54'/%3E%3Cpath d='M84 54 L87 59 L90 54 L93 59 L96 54'/%3E%3Cpath d='M21 101 L24 106 L27 101 L30 106 L33 101'/%3E%3Cpath d='M67 101 L70 106 L73 101 L76 106 L79 101'/%3E%3C/g%3E%3Ccircle cx='50' cy='37' r='2.5' fill='%23ff2020'/%3E%3C/svg%3E");
+  }
+  .christmas-mode .starburst {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    vertical-align: middle;
+    width: 100px;
+    height: 115px;
+    padding: 0;
+    border: none;
+    border-radius: 0;
+    background: center / contain no-repeat;
+    color: #fff;
+    font-size: 12px;
+    filter: drop-shadow(0 0 8px rgba(255,255,255,0.35));
+  }
+  .christmas-mode .starburst:nth-child(1) {
+    padding-top: 34px;
+    text-shadow: 0 0 3px #04310f, 1px 1px 0 #04310f;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115'%3E%3Crect x='42' y='100' width='16' height='14' fill='%236b3a1e'/%3E%3Cpolygon points='50,10 76,44 64,44 86,74 72,74 98,104 2,104 28,74 14,74 36,44 24,44' fill='%23138a36' stroke='%230b5e23' stroke-width='2' stroke-linejoin='round'/%3E%3Cpath d='M30 60 Q50 70 72 58 M20 90 Q50 100 82 88' fill='none' stroke='%23ffd700' stroke-width='2' stroke-dasharray='3 3'/%3E%3Ccircle cx='26' cy='99' r='4' fill='%23ff2020'/%3E%3Ccircle cx='76' cy='97' r='4' fill='%232a8cff'/%3E%3Ccircle cx='66' cy='70' r='3.5' fill='%23ffd700'/%3E%3Ccircle cx='33' cy='68' r='3.5' fill='%23ff2020'/%3E%3Cpolygon points='50,0 53,7 61,7 55,12 57,20 50,15 43,20 45,12 39,7 47,7' fill='%23ffd700' stroke='%23fff3a0' stroke-width='1'/%3E%3C/svg%3E");
+  }
+  .christmas-mode .starburst:nth-child(2) {
+    padding-top: 22px;
+    text-shadow: 0 0 3px #4a2208, 1px 1px 0 #4a2208;
+    background-image: var(--xmas-gingerbread);
+  }
+  .christmas-mode .starburst:nth-child(3) {
+    padding-top: 22px;
+    color: #fff3a0;
+    text-shadow: 0 0 3px #5a0000, 1px 1px 0 #5a0000;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 115'%3E%3Ccircle cx='50' cy='5' r='4' fill='none' stroke='%23ffd700' stroke-width='2'/%3E%3Crect x='40' y='9' width='20' height='12' rx='2' fill='%23d4a017' stroke='%23fff3a0' stroke-width='1'/%3E%3Ccircle cx='50' cy='67' r='46' fill='%23d10f1f' stroke='%23ffd700' stroke-width='2'/%3E%3Cpath d='M7 52 Q50 64 93 52' fill='none' stroke='%23ffd700' stroke-width='3'/%3E%3Cpath d='M7 84 Q50 96 93 84' fill='none' stroke='%23ffd700' stroke-width='3'/%3E%3Cellipse cx='32' cy='42' rx='9' ry='5' transform='rotate(-35 32 42)' fill='%23fff' opacity='0.45'/%3E%3C/svg%3E");
+  }
+  /* christmas mode: light strings + decorations around each section header */
+  .christmas-mode h2.section {
+    position: relative;
+    margin-top: 28px;
+    margin-bottom: 20px;
+  }
+  .section-lights {
+    position: absolute;
+    inset: -11px;
+    pointer-events: none;
+  }
+  .section-decor {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 24px;
+    line-height: 1;
+    pointer-events: none;
+    filter: drop-shadow(0 1px 2px rgba(0,0,0,0.6));
+  }
+  .section-decor.left { left: 16px; }
+  .section-decor.right { right: 16px; }
+  .section-decor .gingerbread {
+    display: inline-block;
+    width: 22px;
+    height: 26px;
+    background: var(--xmas-gingerbread) center / contain no-repeat;
   }
   @keyframes starburst-spinin {
     from { transform: rotate(calc(var(--dir, 1) * 360deg)) scale(0.3); opacity: 0; }
@@ -526,10 +772,36 @@
     0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
     20%, 24%, 55% { opacity: 0.25; }
   }
+  /* christmas sale: shop-sale + christmas-mode swaps in the christmas banner */
+  .shop-sale .sale-banner.sale-christmas,
+  .shop-sale.christmas-mode .sale-banner.sale-halloween { display: none; }
+  .shop-sale.christmas-mode .sale-banner.sale-christmas {
+    display: block;
+    background: #001a0a;
+    border: 4px ridge #ff0000;
+    box-shadow: 0 0 22px rgba(0,255,102,0.45), 0 0 10px rgba(255,0,0,0.5) inset;
+  }
+  .sale-christmas .sale-title {
+    color: #ffffff;
+    text-shadow: 0 0 8px #ff0000, 0 0 20px #00ff66;
+    animation: xmaslights 1.6s step-start infinite;
+  }
+  .sale-christmas .sale-sub { color: #99ffbb; }
+  @keyframes xmaslights {
+    0%, 100% { text-shadow: 0 0 8px #ff0000, 0 0 20px #00ff66; }
+    50% { text-shadow: 0 0 8px #00ff66, 0 0 20px #ff0000; }
+  }
+  .shop-sale.christmas-mode table.pricelist .sale-price {
+    color: #ff3333;
+    text-shadow: 0 0 6px #00ff66;
+  }
+  .shop-sale.christmas-mode table.pricelist .sale-price::before { content: "\1F384  "; }
   .shop-offline table.pricelist .sale-price,
   .shop-vacation table.pricelist .sale-price,
   .shop-offline .sale-banner,
-  .shop-vacation .sale-banner { display: none; }
+  .shop-vacation .sale-banner,
+  .shop-offline.shop-sale.christmas-mode .sale-banner.sale-christmas,
+  .shop-vacation.shop-sale.christmas-mode .sale-banner.sale-christmas { display: none; }
   .backlog-offline .maint-title,
   .backlog-vacation .maint-title {
     font-family: "Courier New", monospace;
@@ -880,6 +1152,7 @@
     display: block;
     filter: drop-shadow(0 0 14px rgba(0,0,0,0.75));
   }
+  .christmas-mode .atf-peek { width: 165px; }
   .atf-peek.spooked {
     transition: transform 0.35s ease-in;
   }
@@ -1006,7 +1279,7 @@
   }
 </style>
 </head>
-<body class="shop-offline"><!-- add class="shop-offline" for UV printer maintenance, class="shop-vacation" to stop taking orders, or class="shop-sale" for sale prices -->
+<body class="christmas-mode shop-offline"><!-- add class="shop-offline" for UV printer maintenance, class="shop-vacation" to stop taking orders, class="shop-sale" for sale prices, or class="christmas-mode" for the christmas floaters (with shop-sale it becomes the christmas sale) -->
 <div class="starfield-a" aria-hidden="true"></div>
 <div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
@@ -1015,6 +1288,107 @@
   <div class="floatpath floatpath3"><img src="img/c3.png" class="spincw" alt=""></div>
   <div class="floatpath floatpath4"><img src="img/c4.png" class="spinccw" alt=""></div>
 </div>
+<script>
+  // christmas mode: swap the floaters and atf peekers for their img/christmas/ versions
+  if (document.body.classList.contains('christmas-mode')) {
+    document.querySelectorAll('.bg-floaters img').forEach(function(img){
+      img.src = img.getAttribute('src').replace('img/', 'img/christmas/');
+    });
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('.atf-peek img').forEach(function(img){
+        img.src = img.getAttribute('src').replace('img/', 'img/christmas/');
+      });
+    });
+
+    // snowflakes falling over the whole page
+    var snow = document.createElement('div');
+    snow.className = 'snowfall';
+    snow.setAttribute('aria-hidden', 'true');
+    var shapes = ['&#10052;', '&#10053;', '&#10054;', '&bull;'];
+    for (var i = 0; i < 60; i++) {
+      var flake = document.createElement('span');
+      flake.className = 'snowflake';
+      flake.innerHTML = shapes[Math.floor(Math.random() * shapes.length)];
+      var fall = 8 + Math.random() * 12;
+      var sway = 2 + Math.random() * 3;
+      flake.style.left = (Math.random() * 100) + 'vw';
+      flake.style.fontSize = (8 + Math.random() * 18) + 'px';
+      flake.style.opacity = (0.4 + Math.random() * 0.6).toFixed(2);
+      flake.style.animationDuration = fall + 's, ' + sway + 's';
+      flake.style.animationDelay = (-Math.random() * fall) + 's, ' + (-Math.random() * sway) + 's';
+      snow.appendChild(flake);
+    }
+    document.body.appendChild(snow);
+
+    // blinking light strings around the edges + a tree in each corner
+    var frame = document.createElement('div');
+    frame.className = 'xmas-frame';
+    frame.setAttribute('aria-hidden', 'true');
+    ['tl', 'tr', 'bl', 'br'].forEach(function(corner){
+      var tree = document.createElement('div');
+      tree.className = 'xmas-tree ' + corner;
+      tree.innerHTML = '&#127876;';
+      frame.appendChild(tree);
+    });
+    function addStrings(parent){
+      ['top', 'bottom', 'left', 'right'].forEach(function(side){
+        var el = document.createElement('div');
+        el.className = 'light-string ' + side;
+        parent.insertBefore(el, parent.firstChild);
+      });
+    }
+    addStrings(frame);
+    function hangLights(){
+      document.querySelectorAll('.light-string').forEach(function(el){
+        var vertical = el.classList.contains('left') || el.classList.contains('right');
+        var length = vertical ? el.offsetHeight : el.offsetWidth;
+        var section = !!el.closest('.section-lights');
+        var count = Math.max(section ? 1 : 4, Math.round(length / (section ? 26 : 34)));
+        el.innerHTML = new Array(count + 1).join('<span class="bulb"></span>');
+      });
+    }
+    document.body.appendChild(frame);
+    hangLights();
+
+    // light up each section header and stand some decorations at its ends
+    var decor = {
+      tree: '&#127876;',
+      present: '&#127873;',
+      snowman: '&#9731;&#65039;',
+      gingerbread: '<span class="gingerbread"></span>'
+    };
+    var sets = [
+      ['tree', 'present', 'gingerbread', 'snowman'],
+      ['snowman', 'gingerbread', 'present', 'tree'],
+      ['gingerbread', 'tree', 'snowman', 'present'],
+      ['present', 'snowman', 'tree', 'gingerbread']
+    ];
+    document.addEventListener('DOMContentLoaded', function(){
+      document.querySelectorAll('h2.section').forEach(function(h2, i){
+        var lights = document.createElement('div');
+        lights.className = 'section-lights';
+        lights.setAttribute('aria-hidden', 'true');
+        addStrings(lights);
+        h2.appendChild(lights);
+        var set = sets[i % sets.length];
+        var narrow = h2.offsetWidth < 360;
+        [['left', set.slice(0, narrow ? 1 : 2)], ['right', set.slice(2, narrow ? 3 : 4)]].forEach(function(side){
+          var el = document.createElement('span');
+          el.className = 'section-decor ' + side[0];
+          el.setAttribute('aria-hidden', 'true');
+          el.innerHTML = side[1].map(function(name){ return decor[name]; }).join('');
+          h2.appendChild(el);
+        });
+      });
+      hangLights();
+    });
+    var resizeTimer;
+    window.addEventListener('resize', function(){
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(hangLights, 150);
+    });
+  }
+</script>
 <div class="pagewrap">
   <div class="marquee-top">
     <div class="logo-wrap" tabindex="0">
@@ -1034,6 +1408,11 @@
     <div class="atf-peek atf-left" id="atfLeft2" aria-hidden="true"><img src="img/atf-left.png" alt=""></div>
     <div class="atf-peek atf-right" id="atfRight" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
     <div class="atf-peek atf-right" id="atfRight2" aria-hidden="true"><img src="img/atf-right.png" alt=""></div>
+    <div class="xmas-scene" aria-hidden="true">
+      <div class="xmas-snowcap"></div>
+      <span class="flank" style="left:12%;">&#9731;&#65039;</span>
+      <span class="flank" style="right:12%; animation-delay:1.2s;">&#127877;</span>
+    </div>
     <div class="blink" style="text-align:center; margin-bottom:4px;">*** NEW DROPS WHENEVER ***</div>
     <h1 data-text="REGULUS ARMS">REGULUS ARMS</h1>
 
@@ -1048,6 +1427,19 @@
       <span class="starburst">100%<br>UV<br>CURED</span>
       <span class="starburst">NOT<br>A<br>STICKER</span>
       <span class="starburst">MADE<br>FOR<br>NERDS</span>
+    </div>
+    <div class="xmas-ground" aria-hidden="true">
+      <span class="tree-big" style="left:6px;">&#127876;</span>
+      <span class="snowman" style="left:62px;">&#9731;&#65039;</span>
+      <span class="present" style="left:112px;">&#127873;</span>
+      <span class="present hide-sm" style="left:140px; bottom:12px;">&#127873;</span>
+      <span class="tree-small" style="left:172px;">&#127876;</span>
+      <span class="tree-small" style="right:172px;">&#127876;</span>
+      <span class="present hide-sm" style="right:140px; bottom:12px;">&#127873;</span>
+      <span class="present" style="right:112px;">&#127873;</span>
+      <span class="snowman" style="right:62px;">&#9731;&#65039;</span>
+      <span class="tree-big" style="right:6px;">&#127876;</span>
+      <div class="xmas-snowbank"></div>
     </div>
   </div>
   <div class="layout">
@@ -1133,7 +1525,7 @@
         </p>
         <hr class="hr90">
         <h2 class="section" id="pricing">ORDER INFO</h2>
-        <div class="sale-banner">
+        <div class="sale-banner sale-halloween">
           <div class="logo-wrap" tabindex="0">
             <div class="sale-title">&#127875; HALLOWEEN SPOOKY SALE &#127875;</div>
             <div class="questpopup">
@@ -1143,6 +1535,17 @@
             </div>
           </div>
           <div class="sale-sub">&#129415; frightfully low prices on custom grip sets &mdash; while the spirits last &#128123;</div>
+        </div>
+        <div class="sale-banner sale-christmas">
+          <div class="logo-wrap" tabindex="0">
+            <div class="sale-title">&#127876; CHRISTMAS SALE &#127876;</div>
+            <div class="questpopup">
+              <div class="questheader">&#9733; NEW LORE UNLOCKED &#9733;</div>
+              <center style="color:#ff3333;">The Christmas Sale is only on GunBroker.</center>
+              <div class="questfooter">&#127877;</div>
+            </div>
+          </div>
+          <div class="sale-sub">&#127873; jolly low prices on custom grip sets &mdash; while supplies last &#10052;</div>
         </div>
         <table class="pricelist">
           <tr><th>ITEM</th><th>PRICE</th></tr>
@@ -1535,7 +1938,7 @@
       '12 WEEKS',
       '6 WEEKS',
       '9 DAYS',
-      '6 DAYS'
+      '3 DAYS'
     ];
 
     function backlogLevel(str){
