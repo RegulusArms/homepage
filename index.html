@@ -729,6 +729,45 @@
   .shop-vacation #backlogClock,
   .shop-vacation .alarmclock.backlog-offline,
   .shop-vacation .order-btn { display: none; }
+  /* thanksgiving mode: add class "shop-thanksgiving" to <body> (vacation, but turkey) */
+  .shop-thanksgiving table.pricelist .price { display: none; }
+  .shop-thanksgiving table.pricelist .offline-msg { display: inline; color: #ff9900; }
+  .alarmclock.backlog-thanksgiving { display: none; }
+  .shop-thanksgiving .alarmclock.backlog-thanksgiving { display: block; }
+  .shop-thanksgiving #backlogClock,
+  .shop-thanksgiving .alarmclock.backlog-offline,
+  .shop-thanksgiving .alarmclock.backlog-vacation,
+  .shop-thanksgiving .order-btn,
+  .shop-thanksgiving table.pricelist .sale-price,
+  .shop-thanksgiving .sale-banner,
+  .shop-thanksgiving.shop-sale.christmas-mode .sale-banner.sale-christmas { display: none !important; }
+  .alarmclock.backlog-thanksgiving {
+    margin-top: 10px;
+    background: linear-gradient(180deg, #2a1200, #120600);
+    border: 6px solid #cc5500;
+    border-image: repeating-linear-gradient(-45deg, #cc5500 0, #cc5500 10px, #ffcc00 10px, #ffcc00 20px, #8b3a00 20px, #8b3a00 30px) 6;
+    box-shadow: 0 0 24px rgba(255,140,0,0.55);
+  }
+  .backlog-thanksgiving .bellrow { font-size: 26px; letter-spacing: 6px; }
+  .backlog-thanksgiving .maint-title {
+    font-family: "Courier New", monospace;
+    font-size: 28px;
+    font-weight: bold;
+    letter-spacing: 3px;
+    color: #ffcc00;
+    text-shadow: 0 0 8px #ff6600, 0 0 22px rgba(204,85,0,0.8);
+    animation: blinker 1s step-start infinite;
+  }
+  .backlog-thanksgiving .clocklabel { color: #ffcc99; }
+  .backlog-thanksgiving .tg-note {
+    margin-top: 6px;
+    font-size: 12px;
+    color: #ffd700;
+    font-style: italic;
+  }
+  .christmas-mode .backlog-thanksgiving .xmas-only { display: block; }
+  .christmas-mode .backlog-thanksgiving .normal-only { display: none; }
+  .christmas-mode .backlog-thanksgiving .tg-note.xmas-only { color: #99ffbb; }
   /* sale mode: add class "shop-sale" to <body> (offline/vacation still win) */
   table.pricelist .sale-price,
   .sale-banner { display: none; }
@@ -1312,7 +1351,7 @@
   }
 </style>
 </head>
-<body class="christmas-mode"><!-- add class="shop-offline" for UV printer maintenance, class="shop-vacation" to stop taking orders, class="shop-sale" for sale prices, or class="christmas-mode" for the christmas floaters (with shop-sale it becomes the christmas sale) -->
+<body class="christmas-mode shop-thanksgiving"><!-- add class="shop-offline" for UV printer maintenance, class="shop-vacation" to stop taking orders, class="shop-thanksgiving" to stop taking orders for thanksgiving, class="shop-sale" for sale prices, or class="christmas-mode" for the christmas floaters (with shop-sale it becomes the christmas sale) -->
 <div class="starfield-a" aria-hidden="true"></div>
 <div class="starfield-b" aria-hidden="true"></div>
 <div class="bg-floaters" aria-hidden="true">
@@ -1545,6 +1584,13 @@
             <div class="clocklabel">all custom items are currently unavailable as we wait for parts</div>
             <div class="elf-note xmas-only">&#127877; santa's elves are working on the printer &mdash; parts are on the sleigh &#128759;</div>
           </div>
+          <div class="alarmclock backlog-thanksgiving" id="backlogThanksgiving">
+            <div class="bellrow">&#127810;&#129411;&#129383;</div>
+            <div class="maint-title">CLOSED FOR THANKSGIVING</div>
+            <div class="clocklabel">we are temporarily not accepting orders &mdash; we're off eating turkey and will be back soon!</div>
+            <div class="tg-note normal-only">&#127809; leave room for pie &#129383;</div>
+            <div class="tg-note xmas-only">&#127876; we'll be back in time for christmas orders &#127873;</div>
+          </div>
           <div class="alarmclock backlog-vacation" id="backlogVacation" style="box-shadow:0 0 22px rgba(255,255,0,0.5);">
             <div class="bellrow">&#127796;</div>
             <div class="maint-title">GONE ON VACATION</div>
@@ -1585,8 +1631,6 @@
         </div>
         <table class="pricelist">
           <tr><th>ITEM</th><th>PRICE</th></tr>
-          <tr><td>UV Printed PMAG 30 Gen 2 5.56</td><td class="unavail oos">OUT OF STOCK</td></tr>
-          <tr><td>UV Printed PMAG, Customer Supplied</td><td class="unavail">UNAVAILABLE</td></tr>
           <tr><td>Custom 1911 Pistol Grip Set</td><td><span class="price has-sale">$21+S&amp;H</span><span class="sale-price">$17.76+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
           <tr><td>Custom Beretta M9/92 Pistol Grip Set</td><td><span class="price has-sale">$27+S&amp;H</span><span class="sale-price">$19.99+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
           <tr><td>Regulus Arms AR-15 Lower Receiver</td><td><span class="price always-on">$129.99+S&amp;H</span><span class="offline-msg">UNAVAILABLE</span></td></tr>
@@ -1958,7 +2002,7 @@
     var digits = document.getElementById('backlogDigits');
     var clock = document.getElementById('backlogClock');
     var label = document.getElementById('backlogLabel');
-    if (!digits || document.body.classList.contains('shop-offline') || document.body.classList.contains('shop-vacation')) return;
+    if (!digits || document.body.classList.contains('shop-offline') || document.body.classList.contains('shop-vacation') || document.body.classList.contains('shop-thanksgiving')) return;
 
     var steps = [
       '4,819,203 YRS',
