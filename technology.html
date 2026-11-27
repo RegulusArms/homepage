@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>~*~ REGULUS ARMS ~*~ Technology ~*~</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: #000;
+    color: #00ff00;
+    font-family: "Comic Sans MS", "Chalkboard SE", cursive, sans-serif;
+    font-size: 16px;
+    overflow-x: hidden;
+  }
+  .starfield-a, .starfield-b {
+    position: fixed;
+    top: -450px; left: -450px; right: -450px; bottom: -450px;
+    z-index: -2;
+    pointer-events: none;
+    will-change: transform;
+  }
+  .starfield-a {
+    background-image:
+      radial-gradient(circle at 7% 14%, #cad7ff 1px, transparent 1px),
+      radial-gradient(circle at 82% 9%, rgba(170,191,255,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 63% 33%, #fff4ea 1px, transparent 1px),
+      radial-gradient(circle at 18% 47%, rgba(255,210,161,0.6) 1px, transparent 1px),
+      radial-gradient(circle at 91% 58%, rgba(234,239,255,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 38% 72%, rgba(248,247,255,0.8) 1px, transparent 1px),
+      radial-gradient(circle at 55% 21%, #9bb0ff 1px, transparent 1px),
+      radial-gradient(circle at 12% 88%, rgba(255,140,105,0.5) 1px, transparent 1px),
+      radial-gradient(circle at 74% 81%, rgba(255,242,161,0.9) 2px, transparent 2px),
+      radial-gradient(circle at 29% 62%, rgba(255,181,108,0.7) 1px, transparent 1px);
+    background-size: 340px 340px;
+    animation: starmoveA 70s linear infinite;
+  }
+  .starfield-b {
+    background-image:
+      radial-gradient(circle at 15% 25%, rgba(202,215,255,0.55) 1px, transparent 1px),
+      radial-gradient(circle at 70% 12%, #f8f7ff 1px, transparent 1px),
+      radial-gradient(circle at 40% 55%, rgba(255,233,168,0.6) 1px, transparent 1px),
+      radial-gradient(circle at 88% 40%, rgba(170,191,255,0.65) 2px, transparent 2px),
+      radial-gradient(circle at 25% 80%, #ffd2a1 1px, transparent 1px),
+      radial-gradient(circle at 60% 68%, rgba(255,107,74,0.5) 1px, transparent 1px),
+      radial-gradient(circle at 8% 60%, rgba(234,239,255,0.7) 1px, transparent 1px);
+    background-size: 190px 230px;
+    animation: starmoveB 55s linear infinite;
+  }
+  @keyframes starmoveA {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(340px, 340px, 0); }
+  }
+  @keyframes starmoveB {
+    from { transform: translate3d(0, 0, 0); }
+    to   { transform: translate3d(190px, 230px, 0); }
+  }
+  a { color: #ffff00; }
+  a:visited { color: #ff66ff; }
+  .pagewrap {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 10px;
+  }
+  .marquee-top {
+    background: repeating-linear-gradient(45deg, #ff00ff, #ff00ff 10px, #00ffff 10px, #00ffff 20px);
+    color: #000;
+    font-weight: bold;
+    padding: 4px;
+    border: 4px outset #ff00ff;
+    font-size: 14px;
+    text-align: center;
+  }
+  .backlink {
+    display: inline-block;
+    margin: 12px 0;
+    background: #000033;
+    border: 2px outset #00ff00;
+    padding: 6px 14px;
+    color: #00ff00;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  .backlink:hover { background: #00ff00; color: #000033; }
+  .backrow { text-align: center; }
+  .titleblock {
+    position: relative;
+    text-align: center;
+    padding: 10px;
+    border: 6px double #ffff00;
+    margin: 10px 0;
+    background: #330033;
+  }
+  .titleblock h1 {
+    display: inline-block;
+    font-family: "Impact", "Arial Black", sans-serif;
+    font-size: 40px;
+    margin: 6px 0;
+    letter-spacing: 2px;
+    color: #ff0000;
+    text-shadow:
+      3px 3px 0 #ffff00,
+      -2px -2px 0 #00ffff,
+      0 0 20px #ff00ff;
+    transform: skew(-3deg);
+  }
+  .titleblock .sub {
+    color: #00ffff;
+    font-size: 18px;
+    text-shadow: 1px 1px 0 #ff00ff;
+  }
+  .mainbar {
+    background: #1a001a;
+    border: 4px ridge #ff00ff;
+    padding: 16px 20px;
+    margin: 10px 0;
+  }
+  h2.section {
+    background: linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #0099ff, #6600ff, #ff0000);
+    background-size: 300% 100%;
+    animation: rainbowscroll 6s linear infinite;
+    color: #000;
+    padding: 6px 10px;
+    border: 3px outset #fff;
+    font-family: "Impact", sans-serif;
+    letter-spacing: 1px;
+  }
+  @keyframes rainbowscroll {
+    from { background-position: 0% 50%; }
+    to   { background-position: 150% 50%; }
+  }
+  .policy {
+    background: #000;
+    border: 3px ridge #00ffff;
+    border-radius: 6px;
+    padding: 16px 20px;
+    margin: 14px 0;
+    line-height: 1.55;
+    color: #ccffcc;
+    box-shadow: 0 0 14px rgba(0,255,255,0.35);
+  }
+  .policy h3 {
+    color: #ffff00;
+    text-shadow: 1px 1px 0 #ff00ff, 0 0 10px rgba(255,255,0,0.5);
+    font-family: "Impact", sans-serif;
+    letter-spacing: 1px;
+    margin: 18px 0 8px 0;
+  }
+  .policy h3:first-child { margin-top: 0; }
+  .policy p { margin: 8px 0; }
+  .policy ul, .policy ol { padding-left: 24px; margin: 8px 0; }
+  .policy li { margin: 6px 0; }
+  .policy strong { color: #ffff00; }
+  .noteblock {
+    background: #330000;
+    border: 2px inset #ffff00;
+    padding: 8px 12px;
+    font-size: 13px;
+    margin: 10px 0;
+  }
+  .meta {
+    font-size: 12px;
+    color: #00ffff;
+    margin-bottom: 10px;
+  }
+  .hr90 {
+    height: 6px;
+    background: repeating-linear-gradient(90deg, #ff0000, #ff9900, #ffff00, #00ff00, #00ffff, #6600ff, #ff00ff, #ff0000 8px);
+    border: none;
+    margin: 14px 0;
+  }
+  .footer {
+    text-align: center;
+    margin-top: 16px;
+    padding: 10px;
+    border-top: 4px double #ffff00;
+    font-size: 12px;
+    color: #00ffff;
+  }
+  .keyblock {
+    background: #000;
+    color: #00ff00;
+    border: 3px inset #00ff00;
+    padding: 12px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
+    line-height: 1.35;
+    white-space: pre;
+    overflow-x: auto;
+    margin: 10px 0;
+  }
+  .cmd {
+    background: #000;
+    color: #00ffff;
+    border: 2px inset #00ffff;
+    padding: 8px 10px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 13px;
+    white-space: pre-wrap;
+    word-break: break-all;
+    margin: 8px 0;
+  }
+  code {
+    font-family: "Courier New", Courier, monospace;
+    color: #00ffff;
+  }
+  .fpr {
+    font-family: "Courier New", Courier, monospace;
+    color: #ffff00;
+    font-size: 15px;
+    word-break: break-word;
+  }
+  .repo {
+    background: #000033;
+    border: 3px outset #00ffff;
+    padding: 12px 16px;
+    margin: 14px 0;
+  }
+  .repo h3 { margin-top: 0; }
+  .repo .lang {
+    display: inline-block;
+    font-size: 12px;
+    color: #000;
+    background: #00ffff;
+    border: 2px outset #fff;
+    padding: 1px 8px;
+    margin: 0 4px 6px 0;
+    font-weight: bold;
+  }
+  .bigquote {
+    text-align: center;
+    font-family: "Impact", "Arial Black", sans-serif;
+    font-size: 26px;
+    color: #ff0000;
+    text-shadow: 2px 2px 0 #ffff00, 0 0 12px #ff00ff;
+    margin: 10px 0 16px 0;
+    line-height: 1.2;
+  }
+  @media (max-width: 600px) {
+    .titleblock h1 { font-size: 30px; }
+    .bigquote { font-size: 20px; }
+    .policy { padding: 12px; }
+  }
+</style>
+</head>
+<body>
+<div class="starfield-a" aria-hidden="true"></div>
+<div class="starfield-b" aria-hidden="true"></div>
+<div class="pagewrap">
+  <div class="marquee-top">
+    &raquo;&raquo;&raquo; REGULUS ARMS &laquo;&laquo;&laquo; TECHNOLOGY DIVISION &raquo;&raquo;&raquo;
+  </div>
+  <div class="titleblock">
+    <h1>TECHNOLOGY</h1>
+    <div class="sub">~ why does an arms company publish code? ~</div>
+  </div>
+  <div class="backrow">
+    <a class="backlink" href="index.html">&laquo; BACK TO HOMEPAGE</a>
+  </div>
+  <div class="mainbar">
+    <h2 class="section">BECAUSE COMPUTERS ARE WEAPONS</h2>
+    <div class="policy">
+      <div class="bigquote">EVERY COMPUTER IS A WEAPON.<br>WE JUST MAKE SURE YOURS IS POINTED THE RIGHT WAY.</div>
+      <p>An arms company makes tools that let regular people defend what's theirs. In 2026, most of what's yours lives on a hard drive: your photos, your records, your messages, your business. The computer is where the fight actually happens.</p>
+      <p>Strong encryption was literally classified as a <strong>munition</strong> by the US government in the 90s, and you needed an export license to ship it overseas. People printed cryptography source code in books and on t-shirts to make the point that code is speech. We think they were right on both counts: code is speech, and code is arms.</p>
+      <p>So we build software the same way we build everything else: in-house, open, and meant to be owned by the person using it. No subscriptions, no telemetry, no cloud account. Everything is <strong>MIT licensed</strong>, so you can read every line, build it yourself, and keep it forever.</p>
+      <div class="noteblock">
+        <strong>Why open source?</strong> Because you shouldn't have to trust us. A security tool you can't inspect is just a promise. Read the source, compile it yourself, and verify.
+      </div>
+    </div>
+
+    <h2 class="section">OUR ARSENAL</h2>
+    <div class="policy">
+      <div class="repo">
+        <h3>&#128274; PNP &mdash; ENCRYPTION THAT SURVIVES P = NP</h3>
+        <span class="lang">C11, libc only</span><span class="lang">Debian / Ubuntu / Mint</span><span class="lang">MIT</span>
+        <p>Almost all encryption in use today is safe only because some math problems are <em>hard</em> to solve. If someone ever proves <strong>P = NP</strong>, or quantum computers get good enough, a lot of that protection could fall apart overnight.</p>
+        <p><strong>pnp</strong> is a command-line tool that encrypts files with a <strong>one-time pad</strong>: a key of truly random bytes, as long as the file, pulled from your machine's hardware random number generators and combined with the file using XOR. A one-time pad doesn't rely on anything being hard to compute, so no faster computer and no clever new algorithm can break it. It's the only encryption that's provably unbreakable.</p>
+        <p>The catch: the key is as big as the file, you can never reuse it, and if you lose it, the file is gone. pnp helps with that: it can write keys straight to a USB stick, split a key into shares that must all be present, or lock a key behind a passphrase.</p>
+        <div class="cmd">pnp photo.jpg          # writes photo.jpg.pnp + photo.jpg.pnp.key
+pnp -d photo.jpg.pnp   # decrypts it again
+pnp --sources          # shows which hardware random sources you have</div>
+        <p>&raquo; <a href="https://github.com/RegulusArms/pnp" target="_blank" rel="noopener">github.com/RegulusArms/pnp</a> &mdash; installable with apt from <a href="https://pnp.regulusarms.com/" target="_blank" rel="noopener">pnp.regulusarms.com</a></p>
+      </div>
+
+      <div class="repo">
+        <h3>&#128193; KESTREL EXPLORER &mdash; A FILE MANAGER THAT DOES THE JOB</h3>
+        <span class="lang">C++ / Qt 6</span><span class="lang">Ubuntu / Kubuntu / Mint</span><span class="lang">MIT</span>
+        <p><em>Why do Linux users still need five separate utilities and a terminal to do normal filesystem work?</em> Kestrel is our answer: a file manager for Ubuntu and Linux Mint that puts the jobs you'd usually do in a terminal right in the window.</p>
+        <ul>
+          <li><strong>Archives:</strong> 7z, zip, rar, zpaq and every tar format, with passwords, split volumes, and a preview of the exact command it'll run.</li>
+          <li><strong>Checksums:</strong> make and verify MD5/SHA files, so you know a download wasn't tampered with.</li>
+          <li><strong>Metadata:</strong> view and strip EXIF/XMP data (like the GPS location baked into your photos) before you post them.</li>
+          <li><strong>Drive imaging:</strong> back up a whole drive byte for byte, compressed and encrypted, and mount disk images like a USB stick.</li>
+          <li><strong>Secure deletion:</strong> shred files so they can't be recovered (with BleachBit installed).</li>
+          <li><strong>Admin only when needed:</strong> retry a failed copy as administrator instead of running your file manager as root.</li>
+        </ul>
+        <p>&raquo; <a href="https://github.com/RegulusArms/kes-c" target="_blank" rel="noopener">github.com/RegulusArms/kes-c</a> &mdash; installable with apt from <a href="https://regulusarms.github.io/kes-c/" target="_blank" rel="noopener">regulusarms.github.io/kes-c</a></p>
+      </div>
+
+      <div class="noteblock">
+        <strong>Heads up:</strong> both projects are early alpha. Expect rough edges, and back up anything you care about before trusting it to new software. Found a bug? Open an issue on GitHub.
+      </div>
+    </div>
+    <hr class="hr90">
+    <div class="backrow">
+      <a class="backlink" href="index.html">&laquo; BACK TO HOMEPAGE</a>
+    </div>
+  </div>
+  <div class="footer">
+    &copy; REGULUS ARMS &mdash; regulusarms.com &mdash; <a href="index.html">home</a> &mdash; <a href="technology.html">technology</a> &mdash; <a href="nsfw.html">adult content policy</a> &mdash; <a href="other-restrictions.html">other restrictions</a> &mdash; <a href="pgp.html">pgp key</a>
+  </div>
+</div>
+</body>
+</html>
